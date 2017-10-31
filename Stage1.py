@@ -29,6 +29,7 @@ class Soldier:
         self.image.clip_draw(self.frame*50, 0, 50, 90, self.x, self.y)
 
 
+
 def enter():
     global space, soldier
     space = Space()
@@ -54,6 +55,14 @@ def handle_events():
     for event in events:
         if event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP:
+            soldier.y += 10
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_DOWN:
+            soldier.y -= 10
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_RIGHT:
+            soldier.x += 10
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_LEFT:
+            soldier.x -= 10
 
 
 def update():
