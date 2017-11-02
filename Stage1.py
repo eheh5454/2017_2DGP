@@ -6,6 +6,11 @@ from Resource import *
 space = None
 soldier = None
 
+UP = False
+DOWN = False
+RIGHT = False
+LEFT = False
+
 
 class Space:
     def __init__(self):
@@ -21,9 +26,28 @@ class Soldier:
         self.frame = 0
         self.image = load_image('soldier.png')
 
+    def UP_MOVE(self):
+        if UP:
+          self.y += 10
+
+    def DOWN_MOVE(self):
+        if DOWN:
+          self.y -= 10
+
+    def RIGHT_MOVE(self):
+        if RIGHT:
+          self.x += 10
+
+    def LEFT_MOVE(self):
+        if LEFT:
+          self.x -= 10
+
     def update(self):
         self.frame = (self.frame + 1) % 8
-        delay(0.05)
+        self.DOWN_MOVE()
+        self.UP_MOVE()
+        self.RIGHT_MOVE()
+        self.LEFT_MOVE()
 
     def draw(self):
         self.image.clip_draw(self.frame*50, 0, 50, 90, self.x, self.y)
@@ -40,7 +64,7 @@ class Eye_monster:
     def update(self):
         self.frame = (self.frame + 1) % 7
         self.move()
-        delay(0.05)
+
 
 
     def draw(self):
@@ -82,18 +106,27 @@ def resume():
 
 
 def handle_events():
+    global UP, DOWN, RIGHT, LEFT, soldier
     events = get_events()
     for event in events:
         if event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_UP:
-            soldier.y += 10
+            UP = True
+        elif event.type == SDL_KEYUP and event.key == SDLK_UP:
+            UP = False
         elif event.type == SDL_KEYDOWN and event.key == SDLK_DOWN:
-            soldier.y -= 10
+            DOWN = True
+        elif event.type == SDL_KEYUP and event.key == SDLK_DOWN:
+            DOWN = False
         elif event.type == SDL_KEYDOWN and event.key == SDLK_RIGHT:
-            soldier.x += 10
+            RIGHT = True
+        elif event.type == SDL_KEYUP and event.key == SDLK_RIGHT:
+            RIGHT = False
         elif event.type == SDL_KEYDOWN and event.key == SDLK_LEFT:
-            soldier.x -= 10
+            LEFT = True
+        elif event.type == SDL_KEYUP and event.key == SDLK_LEFT:
+            LEFT = False
 
 
 def update():
@@ -106,4 +139,5 @@ def draw():
     space.draw()
     soldier.draw()
     eye_monster.draw()
+    delay(0.05)
     update_canvas()
