@@ -25,6 +25,7 @@ class Soldier:
         self.x, self.y = 400, 300
         self.frame = 0
         self.image = load_image('soldier.png')
+        self.hp = 50
 
     def UP_MOVE(self):
         if UP:
