@@ -61,6 +61,7 @@ class Eye_monster:
         self.image = load_image('Eye_monster.png')
         self.xmove = 10
         self.ymove = 10
+        self.hp = 20
 
     def update(self):
         self.frame = (self.frame + 1) % 7
