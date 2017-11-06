@@ -27,31 +27,41 @@ class Soldier:
         self.image = load_image('soldier.png')
         self.hp = 50
 
-    def UP_MOVE(self):
+    def move(self):
         if UP:
           self.y += 10
-
-    def DOWN_MOVE(self):
         if DOWN:
           self.y -= 10
-
-    def RIGHT_MOVE(self):
         if RIGHT:
           self.x += 10
-
-    def LEFT_MOVE(self):
         if LEFT:
           self.x -= 10
 
     def update(self):
         self.frame = (self.frame + 1) % 8
-        self.DOWN_MOVE()
-        self.UP_MOVE()
-        self.RIGHT_MOVE()
-        self.LEFT_MOVE()
+        self.move()
 
     def draw(self):
         self.image.clip_draw(self.frame*50, 0, 50, 90, self.x, self.y)
+
+    def handle_events(self,event):
+        global RIGHT, LEFT, UP, DOWN
+        if (event.type, event.key) == (SDL_KEYDOWN, SDLK_RIGHT):
+            RIGHT = True
+        if (event.type, event.key) == (SDL_KEYDOWN, SDLK_LEFT):
+            LEFT = True
+        if (event.type, event.key) == (SDL_KEYDOWN, SDLK_UP):
+            UP = True
+        if (event.type, event.key) == (SDL_KEYDOWN, SDLK_DOWN):
+            DOWN = True
+        if (event.type, event.key) == (SDL_KEYUP, SDLK_RIGHT):
+            RIGHT = False
+        if (event.type, event.key) == (SDL_KEYUP, SDLK_LEFT):
+            LEFT = False
+        if (event.type, event.key) == (SDL_KEYUP, SDLK_UP):
+            UP = False
+        if (event.type, event.key) == (SDL_KEYUP, SDLK_DOWN):
+            DOWN = False
 
 
 class Eye_monster:
@@ -66,8 +76,6 @@ class Eye_monster:
     def update(self):
         self.frame = (self.frame + 1) % 7
         self.move()
-
-
 
     def draw(self):
         self.image.clip_draw(self.frame*70, 0, 70, 70, self.x, self.y)
@@ -113,22 +121,8 @@ def handle_events():
     for event in events:
         if event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP:
-            UP = True
-        elif event.type == SDL_KEYUP and event.key == SDLK_UP:
-            UP = False
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_DOWN:
-            DOWN = True
-        elif event.type == SDL_KEYUP and event.key == SDLK_DOWN:
-            DOWN = False
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_RIGHT:
-            RIGHT = True
-        elif event.type == SDL_KEYUP and event.key == SDLK_RIGHT:
-            RIGHT = False
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_LEFT:
-            LEFT = True
-        elif event.type == SDL_KEYUP and event.key == SDLK_LEFT:
-            LEFT = False
+        else:
+            soldier.handle_events(event)
 
 
 def update():
