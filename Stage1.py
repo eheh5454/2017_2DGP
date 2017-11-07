@@ -1,6 +1,7 @@
 from pico2d import *
 
 import game_framework
+import random
 from Resource import *
 
 space = None
@@ -11,6 +12,9 @@ DOWN = False
 RIGHT = False
 LEFT = False
 
+monsters = []
+counter = 0
+eye_monster_count = 0
 
 class Space:
     def __init__(self):
@@ -66,7 +70,7 @@ class Soldier:
 
 class Eye_monster:
     def __init__(self):
-        self.x, self.y = 50, 50
+        self.x, self.y = random.randint(50, 750), random.randint(50, 550)
         self.frame = 0
         self.image = load_image('Eye_monster.png')
         self.xmove = 10
@@ -101,10 +105,11 @@ def enter():
 
 
 def exit():
-    global space, soldier, eye_monster
+    global space, soldier, eye_monster, monsters
     del(space)
     del(soldier)
     del(eye_monster)
+    del(monsters)
 
 
 def pause():
@@ -126,8 +131,18 @@ def handle_events():
 
 
 def update():
+    global counter,eye_monster_count
     soldier.update()
     eye_monster.update()
+    for team in monsters:
+        team.update()
+    counter += 0.5
+    if counter > 5 and eye_monster_count <= 10:
+        new_eye_monster = Eye_monster()
+        monsters.append(new_eye_monster)
+        counter = 0
+        eye_monster_count += 1
+
 
 
 def draw():
@@ -135,5 +150,7 @@ def draw():
     space.draw()
     soldier.draw()
     eye_monster.draw()
+    for new_eye_monster in monsters:
+        new_eye_monster.draw()
     delay(0.05)
     update_canvas()
