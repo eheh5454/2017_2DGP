@@ -7,8 +7,9 @@ from Soldier import *
 from Monsters import *
 
 
-timecounter = 0
+current_time = get_time()
 eye_monster_count = 0
+monstertime = 0
 
 class Space:
     def __init__(self):
@@ -50,23 +51,40 @@ def handle_events():
         else:
             soldier.handle_events(event)
 
+def get_frame_time():
+    global current_time
+    frame_time = get_time() - current_time
+    current_time = get_time()
+    return frame_time
+
+
+def make_monster(frame_time):
+    global current_time, monstertime, eye_monster_count
+    monstertime += frame_time
+    if monstertime > 5 and eye_monster_count <= 10:
+            new_eye_monster = Eye_monster()
+            eye_monsters.append(new_eye_monster)
+            monstertime = 0
+            eye_monster_count += 1
+
 
 def update():
-    global timecounter, eye_monster_count
+    global current_time, eye_monster_count, monstertime
     soldier.update()
     eye_monster.update()
+
+    frame_time = get_time() - current_time
+    print(monstertime)
+
+    make_monster(frame_time)
     for team in eye_monsters:
         team.update()
-    timecounter += 0.5
-    if timecounter > 10 and eye_monster_count <= 10:
-        new_eye_monster = Eye_monster()
-        eye_monsters.append(new_eye_monster)
-        timecounter = 0
-        eye_monster_count += 1
     for new_attack in basic_attacks:
         new_attack.update()
         if new_attack.x > 800:
             del(new_attack)
+
+    current_time += frame_time
 
 
 def draw():
@@ -78,5 +96,5 @@ def draw():
         new_attack.draw()
     for new_eye_monster in eye_monsters:
         new_eye_monster.draw()
-    delay(0.05)
+
     update_canvas()
