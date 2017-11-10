@@ -2,29 +2,34 @@ from pico2d import *
 import random
 
 class Eye_monster:
+    PIXEL_PER_METER = (10.0 / 0.2)
+    RUN_SPEED_KMPH = 30.0
+    RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+    RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+    RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
     def __init__(self):
-        self.x, self.y = random.randint(50, 750), random.randint(50, 550)
+        self.x, self.y = random.randint(0, 400), random.randint(0, 300)
         self.frame = 0
         self.image = load_image('Eye_monster.png')
-        self.xmove = 10
-        self.ymove = 10
         self.hp = 20
+        self.xrunspeed = self.RUN_SPEED_PPS
+        self.yrunspeed = self.RUN_SPEED_PPS
 
-    def update(self):
+    def update(self, frame_time):
         self.frame = (self.frame + 1) % 7
-        self.move()
+        self.x += self.xrunspeed * frame_time
+        self.y += self.yrunspeed * frame_time
+        if self.x > 800:
+            self.xrunspeed = -self.xrunspeed
+        if self.x < 0:
+            self.xrunspeed = -self.xrunspeed
+        if self.y > 600:
+            self.yrunspeed = -self.yrunspeed
+        if self.y < 0:
+            self.yrunspeed = -self.yrunspeed
 
     def draw(self):
         self.image.clip_draw(self.frame*70, 0, 70, 70, self.x, self.y)
 
-    def move(self):
-        self.x += self.xmove
-        self.y += self.ymove
-        if self.x > 800:
-            self.xmove = -self.xmove
-        if self.x < 0:
-            self.xmove = -self.xmove
-        if self.y > 600:
-            self.ymove = -self.ymove
-        if self.y < 0:
-            self.ymove = -self.ymove
+

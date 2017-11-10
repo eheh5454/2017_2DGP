@@ -6,7 +6,6 @@ from Resource import *
 from Soldier import *
 from Monsters import *
 
-
 current_time = get_time()
 eye_monster_count = 0
 monstertime = 0
@@ -19,18 +18,16 @@ class Space:
         self.image.draw(400, 300)
 
 def enter():
-    global space, soldier, eye_monster, eye_monsters
+    global space, soldier, eye_monsters
     space = Space()
     soldier = Soldier()
-    eye_monster = Eye_monster()
     eye_monsters = []
 
 
 def exit():
-    global space, soldier, eye_monster, monsters, eye_monsters, basic_attacks
+    global space, soldier, eye_monsters, basic_attacks
     del(space)
     del(soldier)
-    del(eye_monster)
     del(eye_monsters)
     del(basic_attacks)
 
@@ -51,12 +48,6 @@ def handle_events():
         else:
             soldier.handle_events(event)
 
-def get_frame_time():
-    global current_time
-    frame_time = get_time() - current_time
-    current_time = get_time()
-    return frame_time
-
 
 def make_monster(frame_time):
     global current_time, monstertime, eye_monster_count
@@ -70,15 +61,11 @@ def make_monster(frame_time):
 
 def update():
     global current_time, eye_monster_count, monstertime
-    soldier.update()
-    eye_monster.update()
-
     frame_time = get_time() - current_time
-    print(monstertime)
-
+    soldier.update(frame_time)
     make_monster(frame_time)
     for team in eye_monsters:
-        team.update()
+        team.update(frame_time)
     for new_attack in basic_attacks:
         new_attack.update()
         if new_attack.x > 800:
@@ -91,7 +78,6 @@ def draw():
     clear_canvas()
     space.draw()
     soldier.draw()
-    eye_monster.draw()
     for new_attack in basic_attacks:
         new_attack.draw()
     for new_eye_monster in eye_monsters:
