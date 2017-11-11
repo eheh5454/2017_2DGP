@@ -68,24 +68,31 @@ class Soldier:
             pass
 
 class Basic_attack:
+    PIXEL_PER_METER = (10.0 / 0.2)
+    RUN_SPEED_KMPH = 50.0
+    RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+    RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+    RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
     def __init__(self):
         self.image = load_image("Basic_attack.png")
         self.x, self.y = 0, 0
 
-    def update(self):
+    def update(self,frame_time):
+        self.runspeed = self.RUN_SPEED_PPS * frame_time
         self.right_move()
 
     def right_move(self):
-        self.x += 15
+        self.x += self.runspeed
 
     def left_move(self):
-        self.x -= 15
+        self.x -= self.runspeed
 
     def up_move(self):
-        self.y += 15
+        self.y += self.runspeed
 
     def down_move(self):
-        self.y -= 15
+        self.y -= self.runspeed
 
     def draw(self):
         self.image.draw(self.x,self.y)

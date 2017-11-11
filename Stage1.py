@@ -8,7 +8,9 @@ from Monsters import *
 
 current_time = get_time()
 eye_monster_count = 0
-monstertime = 0
+eye_monstertime = 0
+plant_monster_count = 0
+plant_monstertime = 0
 
 class Space:
     def __init__(self):
@@ -18,18 +20,20 @@ class Space:
         self.image.draw(400, 300)
 
 def enter():
-    global space, soldier, eye_monsters
+    global space, soldier, eye_monsters, plant_monsters
     space = Space()
     soldier = Soldier()
     eye_monsters = []
+    plant_monsters = []
 
 
 def exit():
-    global space, soldier, eye_monsters, basic_attacks
+    global space, soldier, eye_monsters, basic_attacks, plant_monsters
     del(space)
     del(soldier)
     del(eye_monsters)
     del(basic_attacks)
+    del(plant_monsters)
 
 
 def pause():
@@ -49,25 +53,36 @@ def handle_events():
             soldier.handle_events(event)
 
 
-def make_monster(frame_time):
-    global current_time, monstertime, eye_monster_count
-    monstertime += frame_time
-    if monstertime > 5 and eye_monster_count <= 10:
+def make_eye_monster(frame_time):
+    global eye_monstertime, eye_monster_count
+    eye_monstertime += frame_time
+    if eye_monstertime > 5 and eye_monster_count <= 10:
             new_eye_monster = Eye_monster()
             eye_monsters.append(new_eye_monster)
-            monstertime = 0
+            eye_monstertime = 0
             eye_monster_count += 1
 
+def make_plant_monster(frame_time):
+    global plant_monstertime, plant_monster_count
+    plant_monstertime += frame_time
+    if plant_monstertime > 7 and plant_monster_count <= 5:
+        new_plant_monster = Plant_monster()
+        plant_monsters.append(new_plant_monster)
+        plant_monstertime = 0
+        plant_monster_count += 1
 
 def update():
-    global current_time, eye_monster_count, monstertime
+    global current_time
     frame_time = get_time() - current_time
     soldier.update(frame_time)
-    make_monster(frame_time)
-    for team in eye_monsters:
-        team.update(frame_time)
+    make_eye_monster(frame_time)
+    make_plant_monster(frame_time)
+    for new_eye_monster in eye_monsters:
+        new_eye_monster.update(frame_time)
+    for new_plant_monster in plant_monsters:
+        new_plant_monster.update(frame_time)
     for new_attack in basic_attacks:
-        new_attack.update()
+        new_attack.update(frame_time)
         if new_attack.x > 800:
             del(new_attack)
 
@@ -82,5 +97,7 @@ def draw():
         new_attack.draw()
     for new_eye_monster in eye_monsters:
         new_eye_monster.draw()
+    for new_plant_monster in plant_monsters:
+        new_plant_monster.draw()
 
     update_canvas()
