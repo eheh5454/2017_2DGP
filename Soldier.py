@@ -11,6 +11,7 @@ LEFT = False
 
 basic_attacks = []
 
+#soldier의 크기 = 50 x 90픽셀, 키 180cm
 class Soldier:
     PIXEL_PER_METER = (10.0 / 0.2)
     RUN_SPEED_KMPH = 25.0

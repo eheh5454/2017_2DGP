@@ -11,7 +11,10 @@ eye_monster_count = 0
 eye_monstertime = 0
 plant_monster_count = 0
 plant_monstertime = 0
+power_monster_count = 0
+power_monstertime = 0
 
+#맵크기 = 800X600픽셀 즉 1600cm x 1200cm 16m x 12m
 class Space:
     def __init__(self):
         self.image = load_image('Space.jpg')
@@ -19,21 +22,24 @@ class Space:
     def draw(self):
         self.image.draw(400, 300)
 
+
 def enter():
-    global space, soldier, eye_monsters, plant_monsters
+    global space, soldier, eye_monsters, plant_monsters, power_monsters
     space = Space()
     soldier = Soldier()
     eye_monsters = []
     plant_monsters = []
+    power_monsters = []
 
 
 def exit():
-    global space, soldier, eye_monsters, basic_attacks, plant_monsters
+    global space, soldier, eye_monsters, basic_attacks, plant_monsters, power_monsters
     del(space)
     del(soldier)
     del(eye_monsters)
     del(basic_attacks)
     del(plant_monsters)
+    del(power_monsters)
 
 
 def pause():
@@ -71,16 +77,28 @@ def make_plant_monster(frame_time):
         plant_monstertime = 0
         plant_monster_count += 1
 
+def make_power_monster(frame_time):
+    global power_monstertime, power_monster_count
+    power_monstertime += frame_time
+    if power_monstertime > 5 and power_monster_count <= 7:
+        new_power_monster = Power_monster()
+        power_monsters.append(new_power_monster)
+        power_monstertime = 0
+        power_monster_count += 1
+
 def update():
     global current_time
     frame_time = get_time() - current_time
     soldier.update(frame_time)
     make_eye_monster(frame_time)
     make_plant_monster(frame_time)
+    make_power_monster(frame_time)
     for new_eye_monster in eye_monsters:
         new_eye_monster.update(frame_time)
     for new_plant_monster in plant_monsters:
         new_plant_monster.update(frame_time)
+    for new_power_monster in power_monsters:
+        new_power_monster.update(frame_time)
     for new_attack in basic_attacks:
         new_attack.update(frame_time)
         if new_attack.x > 800:
@@ -99,5 +117,7 @@ def draw():
         new_eye_monster.draw()
     for new_plant_monster in plant_monsters:
         new_plant_monster.draw()
+    for new_power_monster in power_monsters:
+        new_power_monster.draw()
 
     update_canvas()
