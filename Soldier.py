@@ -11,7 +11,8 @@ LEFT = False
 
 basic_attacks = []
 
-#soldier의 크기 = 50 x 90픽셀, 키 180cm
+
+# soldier의 크기 = 50 x 90픽셀, 키 180cm
 class Soldier:
     PIXEL_PER_METER = (10.0 / 0.2)
     RUN_SPEED_KMPH = 25.0
@@ -19,11 +20,16 @@ class Soldier:
     RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
     RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
+    TIME_PER_ACTION = 0.5
+    ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+    FRAMES_PER_ACTION = 8
+
     def __init__(self):
         self.x, self.y = 400, 300
-        self.frame = 0
         self.image = load_image('soldier.png')
+        self.frame = 0
         self.hp = 50
+        self.total_frames = 0
 
     def move(self):
         if UP:
@@ -37,7 +43,8 @@ class Soldier:
 
     def update(self, frame_time):
         self.runspeed = self.RUN_SPEED_PPS * frame_time
-        self.frame = (self.frame + 1) % 8
+        self.total_frames += self.FRAMES_PER_ACTION * self.ACTION_PER_TIME *frame_time
+        self.frame = int(self.total_frames) % 8
         self.move()
 
     def draw(self):
@@ -67,6 +74,7 @@ class Soldier:
             new_attack.y = self.y
             basic_attacks.append(new_attack)
             pass
+
 
 class Basic_attack:
     PIXEL_PER_METER = (10.0 / 0.2)
