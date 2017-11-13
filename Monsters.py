@@ -14,11 +14,14 @@ class Eye_monster:
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 7
 
+    image = None
+
     def __init__(self):
         self.x, self.y = random.randint(0, 400), random.randint(0, 300)
         self.frame = 0
         self.total_frames = 0
-        self.image = load_image('Eye_monster.png')
+        if self.image == None:
+           self.image = load_image('Eye_monster.png')
         self.hp = 20
         self.xrunspeed = self.RUN_SPEED_PPS
         self.yrunspeed = self.RUN_SPEED_PPS
@@ -40,6 +43,13 @@ class Eye_monster:
     def draw(self):
         self.image.clip_draw(self.frame*70, 0, 70, 70, self.x, self.y)
 
+    def get_bb(self):
+        return self.x - 35, self.y - 35, self.x + 35, self.y + 35
+
+    def draw_bb(self):
+        draw_rectangle(*self.get_bb())
+
+
 
 # plant_monster의 크기 = 130 x 150픽셀, 260cm x 300cm
 class Plant_monster:
@@ -53,11 +63,14 @@ class Plant_monster:
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 4
 
+    image = None
+
     def __init__(self):
         self.x, self.y = random.randint(400, 800), random.randint(0, 300)
         self.frame = 0
         self.total_frames = 0
-        self.image = load_image('Plant_monster.png')
+        if self.image == None:
+            self.image = load_image('Plant_monster.png')
         self.hp = 40
         self.xrunspeed = -self.RUN_SPEED_PPS
         self.yrunspeed = self.RUN_SPEED_PPS
@@ -80,6 +93,11 @@ class Plant_monster:
     def draw(self):
         self.image.clip_draw(self.frame * 130, 0, 130, 150, self.x, self.y)
 
+    def get_bb(self):
+        return self.x -65, self.y - 75, self.x + 65, self.y + 75
+
+    def draw_bb(self):
+        draw_rectangle(*self.get_bb())
 
 # power_monster의 크기 = 80 x 100 픽셀, 160cm x 200cm
 class Power_monster:
@@ -93,11 +111,14 @@ class Power_monster:
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 8
 
+    image = None
+
     def __init__(self):
         self.x, self.y = random.randint(0, 400), random.randint(300, 600)
         self.frame = 0
         self.total_frames = 0
-        self.image = load_image('Power_monster.png')
+        if self.image == None:
+           self.image = load_image('Power_monster.png')
         self.hp = 30
         self.xrunspeed = self.RUN_SPEED_PPS
         self.yrunspeed = -self.RUN_SPEED_PPS
@@ -118,5 +139,11 @@ class Power_monster:
 
     def draw(self):
         self.image.clip_draw(self.frame * 80, 0, 80, 100, self.x, self.y)
+
+    def get_bb(self):
+        return self.x - 40, self.y - 50, self.x + 40, self.y + 50
+
+    def draw_bb(self):
+        draw_rectangle(*self.get_bb())
 
 

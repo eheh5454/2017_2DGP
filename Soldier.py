@@ -24,9 +24,12 @@ class Soldier:
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 8
 
+    image = None
+
     def __init__(self):
         self.x, self.y = 400, 300
-        self.image = load_image('soldier.png')
+        if self.image == None:
+           self.image = load_image('soldier.png')
         self.frame = 0
         self.hp = 50
         self.total_frames = 0
@@ -75,6 +78,12 @@ class Soldier:
             basic_attacks.append(new_attack)
             pass
 
+    def get_bb(self):
+        return self.x - 25, self.y - 45, self.x + 25, self.y + 45
+
+    def draw_bb(self):
+        draw_rectangle(*self.get_bb())
+
 
 class Basic_attack:
     PIXEL_PER_METER = (10.0 / 0.2)
@@ -83,8 +92,11 @@ class Basic_attack:
     RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
     RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
+    image = None
+
     def __init__(self):
-        self.image = load_image("Basic_attack.png")
+        if self.image == None:
+           self.image = load_image("Basic_attack.png")
         self.x, self.y = 0, 0
 
     def update(self,frame_time):
@@ -105,3 +117,32 @@ class Basic_attack:
 
     def draw(self):
         self.image.draw(self.x,self.y)
+
+    def get_bb(self):
+        return self.x - 20, self.y - 10, self.x + 20, self.y + 10
+
+    def draw_bb(self):
+        draw_rectangle(*self.get_bb())
+
+
+class Attack_effect():
+    TIME_PER_ACTION = 0.5
+    ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+    FRAMES_PER_ACTION = 8
+
+    image = None
+
+    def __init__(self):
+        self.x = 10
+        self.y = 10
+        self.frame = 0
+        self.total_frames = 0
+        if self.image == None:
+            self.image = load_image("attack_effect.png")
+
+    def update(self, frame_time):
+        self.total_frames += self.FRAMES_PER_ACTION * self.ACTION_PER_TIME * frame_time
+        self.frame = int(self.total_frames) % 6
+
+    def draw(self):
+        self.image.clip_draw(self.frame * 40, 0, 40, 37, self.x, self.y)
