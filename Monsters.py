@@ -20,8 +20,8 @@ class Eye_monster:
         self.x, self.y = random.randint(0, 400), random.randint(0, 300)
         self.frame = 0
         self.total_frames = 0
-        if self.image == None:
-           self.image = load_image('Eye_monster.png')
+        if Eye_monster.image is None:
+           Eye_monster.image = load_image('Eye_monster.png')
         self.hp = 20
         self.xrunspeed = self.RUN_SPEED_PPS
         self.yrunspeed = self.RUN_SPEED_PPS
@@ -50,7 +50,6 @@ class Eye_monster:
         draw_rectangle(*self.get_bb())
 
 
-
 # plant_monster의 크기 = 130 x 150픽셀, 260cm x 300cm
 class Plant_monster:
     PIXEL_PER_METER = (10.0 / 0.2)
@@ -69,7 +68,7 @@ class Plant_monster:
         self.x, self.y = random.randint(400, 800), random.randint(0, 300)
         self.frame = 0
         self.total_frames = 0
-        if self.image == None:
+        if Plant_monster.image is None:
             self.image = load_image('Plant_monster.png')
         self.hp = 40
         self.xrunspeed = -self.RUN_SPEED_PPS
@@ -99,6 +98,7 @@ class Plant_monster:
     def draw_bb(self):
         draw_rectangle(*self.get_bb())
 
+
 # power_monster의 크기 = 80 x 100 픽셀, 160cm x 200cm
 class Power_monster:
     PIXEL_PER_METER = (10.0 / 0.2)
@@ -117,8 +117,8 @@ class Power_monster:
         self.x, self.y = random.randint(0, 400), random.randint(300, 600)
         self.frame = 0
         self.total_frames = 0
-        if self.image == None:
-           self.image = load_image('Power_monster.png')
+        if Power_monster.image is None:
+           Power_monster.image = load_image('Power_monster.png')
         self.hp = 30
         self.xrunspeed = self.RUN_SPEED_PPS
         self.yrunspeed = -self.RUN_SPEED_PPS
@@ -146,4 +146,27 @@ class Power_monster:
     def draw_bb(self):
         draw_rectangle(*self.get_bb())
 
+class Deleted_em:
+    def __init__(self):
+        self.image = load_image("deleted_em.png")
+        self.time = 0
+        self.x, self.y = 0, 0
 
+    def update(self, frame_time):
+        self.time += frame_time
+
+    def draw(self):
+        self.image.draw(self.x, self.y)
+
+
+class Deleted_pm:
+    def __init__(self):
+        self.image = load_image("deleted_pm.png")
+        self.time = 0
+        self.x, self.y = 0, 0
+
+    def update(self, frame_time):
+        self.time += frame_time
+
+    def draw(self):
+        self.image.draw(self.x, self.y)
