@@ -17,7 +17,7 @@ class Eye_monster:
     image = None
 
     def __init__(self):
-        self.x, self.y = random.randint(0, 400), random.randint(0, 300)
+        self.x, self.y = random.randint(0, 50), random.randint(0, 50)
         self.frame = 0
         self.total_frames = 0
         if Eye_monster.image is None:
@@ -65,7 +65,7 @@ class Plant_monster:
     image = None
 
     def __init__(self):
-        self.x, self.y = random.randint(400, 800), random.randint(0, 300)
+        self.x, self.y = random.randint(750, 800), random.randint(0, 50)
         self.frame = 0
         self.total_frames = 0
         if Plant_monster.image is None:
@@ -114,7 +114,7 @@ class Power_monster:
     image = None
 
     def __init__(self):
-        self.x, self.y = random.randint(0, 400), random.randint(300, 600)
+        self.x, self.y = random.randint(0, 50), random.randint(550, 600)
         self.frame = 0
         self.total_frames = 0
         if Power_monster.image is None:
@@ -146,27 +146,124 @@ class Power_monster:
     def draw_bb(self):
         draw_rectangle(*self.get_bb())
 
-class Deleted_em:
+
+# 80 x 90 픽셀, 160cm x 180cm
+class Swage_monster:
+    PIXEL_PER_METER = (10.0 / 0.2)
+    RUN_SPEED_KMPH = 20.0
+    RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+    RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+    RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+    TIME_PER_ACTION = 0.5
+    ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+    FRAMES_PER_ACTION = 4
+
+    image = None
+
     def __init__(self):
-        self.image = load_image("deleted_em.png")
-        self.time = 0
+        self.x, self.y = random.randint(750, 800), random.randint(550, 600)
+        self.frame = 0
+        self.total_frames = 0
+        if Swage_monster.image is None:
+            self.image = load_image('Swage_monster.png')
+        self.hp = 30
+        self.xrunspeed = -self.RUN_SPEED_PPS
+        self.yrunspeed = -self.RUN_SPEED_PPS
+
+
+    def update(self, frame_time):
+        self.total_frames += self.FRAMES_PER_ACTION * self.ACTION_PER_TIME * frame_time
+        self.frame = int(self.total_frames) % 4
+        self.x += self.xrunspeed * frame_time
+        self.y += self.yrunspeed * frame_time
+        if self.x > 800:
+            self.xrunspeed = -self.xrunspeed
+        if self.x < 0:
+            self.xrunspeed = -self.xrunspeed
+        if self.y > 600:
+            self.yrunspeed = -self.yrunspeed
+        if self.y < 0:
+            self.yrunspeed = -self.yrunspeed
+
+    def draw(self):
+        self.image.clip_draw(self.frame * 80, 0, 80, 90, self.x, self.y)
+
+    def get_bb(self):
+        return self.x -40, self.y - 45, self.x + 40, self.y + 45
+
+    def draw_bb(self):
+        draw_rectangle(*self.get_bb())
+
+class Deleted_em:
+    TIME_PER_ACTION = 0.5
+    ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+    FRAMES_PER_ACTION = 4
+
+    def __init__(self):
+        self.image = load_image("deleted_em2.png")
+        self.frame = 0
+        self.total_frames = 0
         self.x, self.y = 0, 0
 
     def update(self, frame_time):
-        self.time += frame_time
+        self.total_frames += self.FRAMES_PER_ACTION * self.ACTION_PER_TIME * frame_time
+        self.frame = int(self.total_frames)
 
     def draw(self):
-        self.image.draw(self.x, self.y)
+        self.image.clip_draw(self.frame * 70, 0, 70, 70, self.x, self.y)
 
 
 class Deleted_pm:
+    TIME_PER_ACTION = 0.5
+    ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+    FRAMES_PER_ACTION = 4
+
     def __init__(self):
-        self.image = load_image("deleted_pm.png")
-        self.time = 0
+        self.image = load_image("deleted_pm2.png")
+        self.frame = 0
+        self.total_frames = 0
         self.x, self.y = 0, 0
 
     def update(self, frame_time):
-        self.time += frame_time
+        self.total_frames += self.FRAMES_PER_ACTION * self.ACTION_PER_TIME * frame_time
+        self.frame = int(self.total_frames)
 
     def draw(self):
-        self.image.draw(self.x, self.y)
+        self.image.clip_draw(self.frame * 80, 0, 80, 100, self.x, self.y)
+
+class Deleted_plm:
+    TIME_PER_ACTION = 0.5
+    ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+    FRAMES_PER_ACTION = 4
+
+    def __init__(self):
+        self.image = load_image("deleted_plm2.png")
+        self.frame = 0
+        self.total_frames = 0
+        self.x, self.y = 0, 0
+
+    def update(self, frame_time):
+        self.total_frames += self.FRAMES_PER_ACTION * self.ACTION_PER_TIME * frame_time
+        self.frame = int(self.total_frames)
+
+    def draw(self):
+        self.image.clip_draw(self.frame * 130, 0, 130, 130, self.x, self.y)
+
+class Deleted_sm:
+    TIME_PER_ACTION = 0.5
+    ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+    FRAMES_PER_ACTION = 4
+
+    def __init__(self):
+        self.image = load_image("deleted_sm2.png")
+        self.frame = 0
+        self.total_frames = 0
+        self.x, self.y = 0, 0
+
+    def update(self, frame_time):
+        self.total_frames += self.FRAMES_PER_ACTION * self.ACTION_PER_TIME * frame_time
+        self.frame = int(self.total_frames)
+
+    def draw(self):
+        self.image.clip_draw(self.frame * 80, 0, 80, 90, self.x, self.y)

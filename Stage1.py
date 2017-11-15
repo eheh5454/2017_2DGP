@@ -13,7 +13,8 @@ plant_monster_count = 0
 plant_monstertime = 0
 power_monster_count = 0
 power_monstertime = 0
-
+swage_monster_count = 0
+swage_monstertime = 0
 
 # 맵크기 = 800X600픽셀, 1600cm x 1200cm, 16m x 12m
 class Space:
@@ -26,10 +27,12 @@ class Space:
 
 # 시간에 따라 monster 를 만들어주는 함수
 def make_all_monster(frame_time):
-    global eye_monstertime, eye_monster_count, plant_monstertime, plant_monster_count, power_monstertime, power_monster_count
+    global eye_monstertime, eye_monster_count, plant_monstertime, plant_monster_count, \
+           power_monstertime, power_monster_count, swage_monstertime, swage_monster_count
     eye_monstertime += frame_time
     plant_monstertime += frame_time
     power_monstertime += frame_time
+    swage_monstertime += frame_time
     if eye_monstertime > 5 and eye_monster_count <= 10:
         new_eye_monster = Eye_monster()
         eye_monsters.append(new_eye_monster)
@@ -45,6 +48,11 @@ def make_all_monster(frame_time):
         power_monsters.append(new_power_monster)
         power_monstertime = 0
         power_monster_count += 1
+    if swage_monstertime > 6 and swage_monster_count <= 10:
+        new_swage_monster = Swage_monster()
+        swage_monsters.append(new_swage_monster)
+        swage_monstertime = 0
+        swage_monster_count += 1
 
 # 기본 충돌 체크 함수
 def collision_check(a, b):
@@ -57,6 +65,7 @@ def collision_check(a, b):
     if bottom_a > top_b: return False
 
     return True
+
 
 # 공격 이펙트를 추가하는 함수
 def append_attack_effect(new_attack):
@@ -104,8 +113,19 @@ def collision_attack_monster():
                 if new_attack in basic_attacks:
                    basic_attacks.remove(new_attack)
                 power_monster.hp -= 5
+    # basic_attack 과 swage_monster 의 충돌 체크
+    for new_attack in basic_attacks:
+        for swage_monster in swage_monsters:
+            if collision_check(new_attack, swage_monster):
+                new_attack_effect = Attack_effect()
+                new_attack_effect.x, new_attack_effect.y = new_attack.x + 20, new_attack.y
+                attack_effects.append(new_attack_effect)
+                if new_attack in basic_attacks:
+                   basic_attacks.remove(new_attack)
+                swage_monster.hp -= 5
 
 
+# 모든 몬스터 update
 def update_all_monster(frame_time):
     collision_attack_monster()
     for new_eye_monster in eye_monsters:
@@ -118,6 +138,9 @@ def update_all_monster(frame_time):
     for new_plant_monster in plant_monsters:
         new_plant_monster.update(frame_time)
         if new_plant_monster.hp <= 0:
+            new_deleted_plm = Deleted_plm()
+            new_deleted_plm.x, new_deleted_plm.y = new_plant_monster.x, new_plant_monster.y
+            deleted_plms.append(new_deleted_plm)
             plant_monsters.remove(new_plant_monster)
     for new_power_monster in power_monsters:
         new_power_monster.update(frame_time)
@@ -126,8 +149,15 @@ def update_all_monster(frame_time):
             new_deleted_pm.x, new_deleted_pm.y = new_power_monster.x, new_power_monster.y
             deleted_pms.append(new_deleted_pm)
             power_monsters.remove(new_power_monster)
+    for new_swage_monster in swage_monsters:
+        new_swage_monster.update(frame_time)
+        if new_swage_monster.hp <= 0:
+            new_deleted_sm = Deleted_sm()
+            new_deleted_sm.x, new_deleted_sm.y = new_swage_monster.x, new_swage_monster.y
+            deleted_sms.append(new_deleted_sm)
+            swage_monsters.remove(new_swage_monster)
 
-
+# 모든 몬스터 draw
 def draw_all_monster():
     for new_eye_monster in eye_monsters:
         new_eye_monster.draw()
@@ -138,39 +168,59 @@ def draw_all_monster():
     for new_power_monster in power_monsters:
         new_power_monster.draw()
         #new_power_monster.draw_bb()
+    for new_swage_monster in swage_monsters:
+        new_swage_monster.draw()
+
 
 # monster 들의 삭제 이펙트 업데이트
 def deleted_effect_update(frame_time):
     for deleted_em in deleted_ems:
         deleted_em.update(frame_time)
-        if deleted_em.time >= 1.0:
+        if deleted_em.frame >= 3:
             deleted_ems.remove(deleted_em)
     for deleted_pm in deleted_pms:
         deleted_pm.update(frame_time)
-        if deleted_pm.time >= 1.0:
+        if deleted_pm.frame >= 3:
             deleted_pms.remove(deleted_pm)
+    for deleted_plm in deleted_plms:
+        deleted_plm.update(frame_time)
+        if deleted_plm.frame >= 3:
+            deleted_plms.remove(deleted_plm)
+    for deleted_sm in deleted_sms:
+        deleted_sm.update(frame_time)
+        if deleted_sm.frame >= 2:
+            deleted_sms.remove(deleted_sm)
 
-# monster 들의 삭제 이펙트 그리기 ㅁ
+
+# monster 들의 삭제 이펙트 그리기
 def deleted_effect_draw():
     for deleted_em in deleted_ems:
         deleted_em.draw()
     for deleted_pm in deleted_pms:
         deleted_pm.draw()
+    for deleted_plm in deleted_plms:
+        deleted_plm.draw()
+    for deleted_sm in deleted_sms:
+        deleted_sm.draw()
 
 def enter():
-    global space, soldier, eye_monsters, plant_monsters, power_monsters, attack_effects, deleted_ems, deleted_pms
+    global space, soldier, eye_monsters, plant_monsters, power_monsters, attack_effects, deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms
     space = Space()
     soldier = Soldier()
     attack_effects = []
     eye_monsters = []
     plant_monsters = []
     power_monsters = []
+    swage_monsters = []
     deleted_ems = []
     deleted_pms = []
+    deleted_plms = []
+    deleted_sms = []
+
 
 
 def exit():
-    global space, soldier, eye_monsters, basic_attacks, plant_monsters, power_monsters, attack_effects, deleted_ems, deleted_pms
+    global space, soldier, eye_monsters, basic_attacks, plant_monsters, power_monsters, attack_effects, deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms
     del(space)
     del(soldier)
     del(eye_monsters)
@@ -178,8 +228,11 @@ def exit():
     del(plant_monsters)
     del(power_monsters)
     del(attack_effects)
+    del(swage_monsters)
     del(deleted_ems)
     del(deleted_pms)
+    del(deleted_plms)
+    del(deleted_sms)
 
 
 
