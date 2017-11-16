@@ -196,7 +196,7 @@ class Swage_monster:
         draw_rectangle(*self.get_bb())
 
 class Deleted_em:
-    TIME_PER_ACTION = 0.5
+    TIME_PER_ACTION = 1.0
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 4
 
@@ -215,7 +215,7 @@ class Deleted_em:
 
 
 class Deleted_pm:
-    TIME_PER_ACTION = 0.5
+    TIME_PER_ACTION = 1.0
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 4
 
@@ -233,7 +233,7 @@ class Deleted_pm:
         self.image.clip_draw(self.frame * 80, 0, 80, 100, self.x, self.y)
 
 class Deleted_plm:
-    TIME_PER_ACTION = 0.5
+    TIME_PER_ACTION = 1.0
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 4
 
