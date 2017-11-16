@@ -1,5 +1,7 @@
 from pico2d import *
 import random
+import json
+
 
 space = None
 soldier = None
@@ -11,6 +13,19 @@ LEFT = False
 
 basic_attacks = []
 missile_attacks = []
+special_attacks = []
+
+special_attack_text = '{ \
+    "attack1" : {"x":50, "y":550},"attack2" : {"x":150, "y":550},"attack3" : {"x":250, "y":550},"attack4" : {"x":350, "y":550},\
+    "attack5" : {"x":450, "y":550},"attack6" : {"x":550, "y":550},"attack7" : {"x":650, "y":550},"attack8" : {"x":750, "y":550},\
+    "attack9" : {"x":50, "y":400},"attack10" : {"x":150, "y":400},"attack11" : {"x":250, "y":400},"attack12" : {"x":350, "y":400},\
+    "attack13" : {"x":450, "y":400},"attack14" : {"x":550, "y":400},"attack15" : {"x":650, "y":400},"attack16" : {"x":750, "y":400},\
+    "attack17" : {"x":50, "y":250},"attack18" : {"x":150, "y":250},"attack19" : {"x":250, "y":250},"attack20" : {"x":350, "y":250},\
+    "attack21" : {"x":450, "y":250},"attack22" : {"x":550, "y":250},"attack23" : {"x":650, "y":250},"attack24" : {"x":750, "y":250},\
+    "attack25" : {"x":50, "y":100},"attack26" : {"x":150, "y":100},"attack27" : {"x":250, "y":100},"attack28" : {"x":350, "y":100},\
+    "attack29" : {"x":450, "y":100},"attack30" : {"x":550, "y":100},"attack31" : {"x":650, "y":100},"attack32" : {"x":750, "y":100}\
+}'
+
 
 # soldier의 크기 = 50 x 80픽셀, 키 160cm
 class Soldier:
@@ -92,6 +107,15 @@ class Soldier:
                 new_attack.dir = 1
                 new_attack.frame = 1
             missile_attacks.append(new_attack)
+        if (event.type, event.key) == (SDL_KEYDOWN, SDLK_d):
+            special_attack_data = json.loads(special_attack_text)
+            for data in special_attack_data:
+                special_attack = Special_attack()
+                special_attack.x = special_attack_data[data]['x']
+                special_attack.y = special_attack_data[data]['y']
+                special_attacks.append(special_attack)
+
+
 
     def get_bb(self):
         return self.x - 25, self.y - 45, self.x + 25, self.y + 45
@@ -219,3 +243,58 @@ class Attack_effect2():
 
     def draw(self):
         self.image.clip_draw(self.frame * 50, 0, 50, 50, self.x, self.y)
+
+class Special_attack():
+    PIXEL_PER_METER = (10.0 / 0.2)
+    RUN_SPEED_KMPH = 3.0
+    RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+    RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+    RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+    TIME_PER_ACTION = 1.0
+    ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+    FRAMES_PER_ACTION = 6
+
+    image = None
+
+    def __init__(self):
+        self.x = 0
+        self.y = 0
+        self.frame = 0
+        self.total_frames = 0
+        if Special_attack.image is None:
+            self.image = load_image("special_attack.png")
+
+    def update(self, frame_time):
+        self.speed = self.RUN_SPEED_PPS * frame_time
+        self.y -= self.speed
+        self.total_frames += self.FRAMES_PER_ACTION * self.ACTION_PER_TIME * frame_time
+        self.frame = int(self.total_frames)
+
+    def draw(self):
+        self.image.clip_draw(self.frame * 40, 0, 40, 40, self.x, self.y)
+
+class Special_attack_effect():
+    TIME_PER_ACTION = 1.0
+    ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+    FRAMES_PER_ACTION = 6
+
+    image = None
+
+    def __init__(self):
+        self.x = 0
+        self.y = 0
+        self.frame = 0
+        self.total_frames = 0
+        if Special_attack_effect.image is None:
+            self.image = load_image("special_attack_effect.png")
+
+    def update(self, frame_time):
+        self.total_frames += self.FRAMES_PER_ACTION * self.ACTION_PER_TIME * frame_time
+        self.frame = int(self.total_frames)
+
+    def draw(self):
+        self.image.clip_draw(self.frame * 70, 0, 70, 80, self.x, self.y)
+
+    def get_bb(self):
+        return self.x - 35, self.y - 40, self.x + 35, self.y + 40

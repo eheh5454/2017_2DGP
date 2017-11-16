@@ -59,15 +59,6 @@ def collision_check(a, b):
     return True
 
 
-# 공격 이펙트를 추가하는 함수
-def append_attack_effect(new_attack):
-    global attack_effects, basic_attacks
-    new_attack_effect = Attack_effect()
-    new_attack_effect.x, new_attack_effect.y = new_attack.x + 20, new_attack.y
-    attack_effects.append(new_attack_effect)
-    basic_attacks.remove(new_attack)
-
-
 def collision_soldier_monster():
     pass
 
@@ -76,7 +67,7 @@ def collision_soldier_monster():
 def collision_attack_monster():
     global basic_attacks, eye_monsters, plant_monsters, power_monsters, attack_effects, missile_attacks
     all_monsters = power_monsters + eye_monsters + swage_monsters + plant_monsters
-    # basic_attack 과 monster 의 충돌 체크
+    # basic_attack 과 monster 의 충돌 처리
     for new_attack in basic_attacks:
         for monster in all_monsters:
             if collision_check(new_attack, monster):
@@ -86,7 +77,7 @@ def collision_attack_monster():
                 if new_attack in basic_attacks:
                    basic_attacks.remove(new_attack)
                 monster.hp -= 5
-    # missile_attack 과 monster 의 충돌 체크
+    # missile_attack 과 monster 의 충돌 처리
     for new_attack in missile_attacks:
         for monster in all_monsters:
             if collision_check(new_attack, monster):
@@ -96,6 +87,11 @@ def collision_attack_monster():
                 if new_attack in missile_attacks:
                    missile_attacks.remove(new_attack)
                 monster.hp -= 10
+    # special_attack 과 monster 의 충돌 처리
+    for new_attack in special_attack_effects:
+        for monster in all_monsters:
+            if collision_check(new_attack, monster):
+                monster.hp -= 30
 
 
 # 모든 몬스터 update
@@ -165,6 +161,7 @@ def deleted_effect_draw():
         deleted_effect.draw()
 
 
+# 모든 공격과 이펙트 update
 def update_all_attack(frame_time):
     for new_attack in basic_attacks:
         new_attack.update(frame_time)
@@ -182,20 +179,35 @@ def update_all_attack(frame_time):
         attack_effect.update(frame_time)
         if attack_effect.frame == 5:
             attack_effects2.remove(attack_effect)
+    for new_attack in special_attacks:
+        new_attack.update(frame_time)
+        if new_attack.frame == 6:
+            special_attacks.remove(new_attack)
+            new_special_attack_effect = Special_attack_effect()
+            new_special_attack_effect.x, new_special_attack_effect.y = new_attack.x, new_attack.y
+            special_attack_effects.append(new_special_attack_effect)
+    for new_special_attack_effect in special_attack_effects:
+        new_special_attack_effect.update(frame_time)
+        if new_special_attack_effect.frame == 6:
+            special_attack_effects.remove(new_special_attack_effect)
+
+
 
 
 def draw_all_attack():
-    all_attacks = basic_attacks + missile_attacks + attack_effects + attack_effects2
+    all_attacks = basic_attacks + missile_attacks + attack_effects + attack_effects2 + special_attacks + special_attack_effects
     for attack in all_attacks:
         attack.draw()
 
 
 def enter():
-    global space, soldier, eye_monsters, plant_monsters, power_monsters, attack_effects, deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, attack_effects2
+    global space, soldier, eye_monsters, plant_monsters, power_monsters, attack_effects, \
+        deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, attack_effects2, special_attack_effects
     space = Space()
     soldier = Soldier()
     attack_effects = []
     attack_effects2 = []
+    special_attack_effects = []
     eye_monsters = []
     plant_monsters = []
     power_monsters = []
@@ -208,7 +220,9 @@ def enter():
 
 
 def exit():
-    global space, soldier, eye_monsters, basic_attacks, plant_monsters, power_monsters, attack_effects, deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, missile_attacks, attack_effects2
+    global space, soldier, eye_monsters, basic_attacks, plant_monsters, power_monsters, attack_effects, \
+        deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, missile_attacks, attack_effects2, \
+        special_attacks, special_attack_effects
     del(space)
     del(soldier)
     del(eye_monsters)
@@ -216,13 +230,15 @@ def exit():
     del(plant_monsters)
     del(power_monsters)
     del(attack_effects)
+    del(attack_effects2)
     del(missile_attacks)
     del(swage_monsters)
     del(deleted_ems)
     del(deleted_pms)
     del(deleted_plms)
     del(deleted_sms)
-    del(attack_effects2)
+    del(special_attacks)
+    del(special_attack_effects)
 
 
 def pause():
