@@ -1,7 +1,5 @@
 from pico2d import *
-import random
 import json
-
 
 space = None
 soldier = None
@@ -108,6 +106,9 @@ class Soldier:
                 new_attack.frame = 1
             missile_attacks.append(new_attack)
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_d):
+            #special_attack_file = open('special_attack_data.txt', 'r')
+            #special_attack_data = json.load(special_attack_file)
+            #special_attack_file.close()
             special_attack_data = json.loads(special_attack_text)
             for data in special_attack_data:
                 special_attack = Special_attack()

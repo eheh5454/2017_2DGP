@@ -5,6 +5,7 @@ import random
 from Resource import *
 from Soldier import *
 from Monsters import *
+import json
 
 current_time = get_time()
 eye_monstertime = 0
