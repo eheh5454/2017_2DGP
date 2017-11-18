@@ -232,6 +232,7 @@ class Deleted_pm:
     def draw(self):
         self.image.clip_draw(self.frame * 80, 0, 80, 100, self.x, self.y)
 
+
 class Deleted_plm:
     TIME_PER_ACTION = 1.0
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
@@ -249,6 +250,7 @@ class Deleted_plm:
 
     def draw(self):
         self.image.clip_draw(self.frame * 130, 0, 130, 130, self.x, self.y)
+
 
 class Deleted_sm:
     TIME_PER_ACTION = 0.5

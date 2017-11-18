@@ -60,13 +60,24 @@ def collision_check(a, b):
     return True
 
 
+# soldier 와 monster 의 충돌 처리
 def collision_soldier_monster():
-    pass
+    all_monster = eye_monsters + power_monsters + plant_monsters + swage_monsters
+    for monster in all_monster:
+        if collision_check(monster, soldier):
+            # DAMAGED 상황일 때는 제외하고 충돌 처리, 충돌이 발생하면 state 를 DAMAGED 로 전환하고 frame 초기화
+            if soldier.state == (soldier.RIGHT_RUN or soldier.RIGHT_ATTACK or soldier.RIGHT_THROW_BOMB):
+                soldier.state = soldier.RIGHT_DAMAGED
+                soldier.frame = 0
+                soldier.hp -= 5
+            if soldier.state == (soldier.LEFT_RUN or soldier.LEFT_DAMAGED or soldier.LEFT_THROW_BOMB):
+                soldier.state = soldier.LEFT_DAMAGED
+                soldier.frame = 0
+                soldier.hp -= 5
 
 
 # attack 과 monster 의 충돌 처리
 def collision_attack_monster():
-    global basic_attacks, eye_monsters, plant_monsters, power_monsters, attack_effects, missile_attacks
     all_monsters = power_monsters + eye_monsters + swage_monsters + plant_monsters
     # basic_attack 과 monster 의 충돌 처리
     for new_attack in basic_attacks:
@@ -95,7 +106,7 @@ def collision_attack_monster():
                 monster.hp -= 30
 
 
-# 모든 몬스터 update
+# 모든 몬스터 update, 몬스터가 죽으면 deleted 이펙트 그 좌표에 추가
 def update_all_monster(frame_time):
     collision_attack_monster()
     for new_eye_monster in eye_monsters:
@@ -193,8 +204,7 @@ def update_all_attack(frame_time):
             special_attack_effects.remove(new_special_attack_effect)
 
 
-
-
+# 모든 공격과 이펙트 draw
 def draw_all_attack():
     all_attacks = basic_attacks + missile_attacks + attack_effects + attack_effects2 + special_attacks + special_attack_effects
     for attack in all_attacks:
@@ -267,6 +277,7 @@ def update():
     update_all_monster(frame_time)
     deleted_effect_update(frame_time)
     update_all_attack(frame_time)
+    collision_soldier_monster()
     current_time += frame_time
 
 

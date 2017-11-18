@@ -1,14 +1,6 @@
 from pico2d import *
 import json
 
-space = None
-soldier = None
-
-UP = False
-DOWN = False
-RIGHT = False
-LEFT = False
-
 basic_attacks = []
 missile_attacks = []
 special_attacks = []
@@ -25,7 +17,7 @@ special_attack_text = '{ \
 }'
 
 
-# soldier의 크기 = 50 x 80픽셀, 키 160cm
+# soldier 의 크기 = 50 x 80픽셀, 키 160cm
 class Soldier:
     PIXEL_PER_METER = (10.0 / 0.2)
     RUN_SPEED_KMPH = 25.0
@@ -35,76 +27,97 @@ class Soldier:
 
     TIME_PER_ACTION = 0.5
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-    FRAMES_PER_ACTION = 8
+    FRAMES_PER_ACTION = 6
+
+    RIGHT_RUN, LEFT_RUN, RIGHT_DAMAGED, LEFT_DAMAGED = 0, 1, 2, 3
+    RIGHT_ATTACK, LEFT_ATTACK, RIGHT_THROW_BOMB, LEFT_THROW_BOMB = 4, 5, 6, 7
+
+    UP, DOWN, RIGHT, LEFT = False, False, False, False
 
     def __init__(self):
         self.x, self.y = 400, 300
-        self.dir = 0
-        self.image = load_image('soldier.png')
+        self.state = self.RIGHT_RUN
+        self.image = load_image('soldier2.png')
         self.frame = 0
-        self.hp = 50
         self.total_frames = 0
+        self.hp = 50
 
     def move(self):
-        if UP:
-          self.y += self.runspeed
-        if DOWN:
-          self.y -= self.runspeed
-        if RIGHT:
-          self.x += self.runspeed
-          self.dir = 0
-        if LEFT:
-          self.x -= self.runspeed
-          self.dir = 1
+        if self.UP:
+            self.y += self.runspeed
+        if self.DOWN:
+            self.y -= self.runspeed
+        if self.RIGHT:
+            self.x += self.runspeed
+            self.state = self.RIGHT_RUN
+        if self.LEFT:
+            self.x -= self.runspeed
+            self.state = self.LEFT_RUN
 
     def update(self, frame_time):
         self.runspeed = self.RUN_SPEED_PPS * frame_time
         self.total_frames += self.FRAMES_PER_ACTION * self.ACTION_PER_TIME *frame_time
         self.frame = int(self.total_frames) % 6
         self.move()
+        # 오른쪽 데미지를 입었을때 프레임이 5가 되면 오른쪽 달리기 상태로 전환
+        if self.state == self.RIGHT_DAMAGED and self.frame == 5:
+            self.state = self.RIGHT_RUN
+        # 왼쪽 데미지를 입었을떄 프레임이 5가 되면 왼쪽 달리기 상태로 전환
+        if self.state == self.LEFT_DAMAGED and self.frame == 5:
+            self.state = self.LEFT_RUN
 
     def draw(self):
-        self.image.clip_draw(self.frame*50, self.dir * 80, 50, 80, self.x, self.y)
+        self.image.clip_draw(self.frame*50, self.state * 80, 50, 80, self.x, self.y)
 
     def handle_events(self, event):
         global RIGHT, LEFT, UP, DOWN
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_RIGHT):
-            RIGHT = True
+            self.RIGHT = True
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_LEFT):
-            LEFT = True
+            self.LEFT = True
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_UP):
-            UP = True
+            self.UP = True
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_DOWN):
-            DOWN = True
+            self.DOWN = True
         if (event.type, event.key) == (SDL_KEYUP, SDLK_RIGHT):
-            RIGHT = False
+            self.RIGHT = False
         if (event.type, event.key) == (SDL_KEYUP, SDLK_LEFT):
-            LEFT = False
+            self.LEFT = False
         if (event.type, event.key) == (SDL_KEYUP, SDLK_UP):
-            UP = False
+            self.UP = False
         if (event.type, event.key) == (SDL_KEYUP, SDLK_DOWN):
-            DOWN = False
+            self.DOWN = False
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_a):
             new_attack = Basic_attack()
-            # dir 이 0이면 오른쪽 발사
-            if self.dir == 0:
+            # RIGHT_RUN state 이면 오른쪽 발사
+            if self.state == self.RIGHT_RUN:
                new_attack.x, new_attack.y = self.x + 10, self. y
-            # dir 이 1이면 왼쪽 발사
-            elif self.dir == 1:
+               self.state = self.RIGHT_ATTACK
+            # LEFT_RUN state 이면 왼쪽 발사
+            elif self.state == self.LEFT_RUN:
                 new_attack.x, new_attack.y = self.x - 10, self.y
                 new_attack.dir = 1
                 new_attack.frame = 1
+                self.state = self.LEFT_ATTACK
             basic_attacks.append(new_attack)
+        # a키를 놓을 때는 공격상태에서 원래 상태로 전환
+        if (event.type, event.key) == (SDL_KEYUP, SDLK_a):
+            if self.state == self.RIGHT_ATTACK:
+                self.state = self.RIGHT_RUN
+            elif self.state == self.LEFT_ATTACK:
+                self.state = self.LEFT_RUN
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_s):
             new_attack = Missile_attack()
-            if self.dir == 0:
+            # RIGHT_RUN state 이면 오른쪽 발사
+            if self.state == self.RIGHT_RUN:
                 new_attack.x, new_attack.y = self.x + 10, self.y
-            # dir 이 1이면 왼쪽 발사
-            elif self.dir == 1:
+            # LEFT_RUN state 이면 왼쪽 발사
+            elif self.state == self.LEFT_RUN:
                 new_attack.x, new_attack.y = self.x - 10, self.y
                 new_attack.dir = 1
                 new_attack.frame = 1
             missile_attacks.append(new_attack)
+        # 필살기 사용
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_d):
             #special_attack_file = open('special_attack_data.txt', 'r')
             #special_attack_data = json.load(special_attack_file)
@@ -115,8 +128,6 @@ class Soldier:
                 special_attack.x = special_attack_data[data]['x']
                 special_attack.y = special_attack_data[data]['y']
                 special_attacks.append(special_attack)
-
-
 
     def get_bb(self):
         return self.x - 25, self.y - 45, self.x + 25, self.y + 45
