@@ -4,6 +4,7 @@ import json
 basic_attacks = []
 missile_attacks = []
 special_attacks = []
+bomb_attacks = []
 
 special_attack_text = '{ \
     "attack1" : {"x":50, "y":550},"attack2" : {"x":150, "y":550},"attack3" : {"x":250, "y":550},"attack4" : {"x":350, "y":550},\
@@ -93,30 +94,43 @@ class Soldier:
             if self.state == self.RIGHT_RUN:
                new_attack.x, new_attack.y = self.x + 10, self. y
                self.state = self.RIGHT_ATTACK
+               self.frame = 0
+               basic_attacks.append(new_attack)
             # LEFT_RUN state 이면 왼쪽 발사
             elif self.state == self.LEFT_RUN:
                 new_attack.x, new_attack.y = self.x - 10, self.y
                 new_attack.dir = 1
                 new_attack.frame = 1
                 self.state = self.LEFT_ATTACK
-            basic_attacks.append(new_attack)
+                self.frame = 0
+                basic_attacks.append(new_attack)
         # a키를 놓을 때는 공격상태에서 원래 상태로 전환
         if (event.type, event.key) == (SDL_KEYUP, SDLK_a):
             if self.state == self.RIGHT_ATTACK:
                 self.state = self.RIGHT_RUN
             elif self.state == self.LEFT_ATTACK:
                 self.state = self.LEFT_RUN
+        # s키를 누르면 수류탄 투척
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_s):
-            new_attack = Missile_attack()
+            new_attack = Bomb()
             # RIGHT_RUN state 이면 오른쪽 발사
             if self.state == self.RIGHT_RUN:
-                new_attack.x, new_attack.y = self.x + 10, self.y
+                self.state = self.RIGHT_THROW_BOMB
+                self.frame = 0
+                new_attack.x, new_attack.y = self.x + 10, self.y - 25
+                bomb_attacks.append(new_attack)
             # LEFT_RUN state 이면 왼쪽 발사
             elif self.state == self.LEFT_RUN:
-                new_attack.x, new_attack.y = self.x - 10, self.y
+                self.state = self.LEFT_THROW_BOMB
+                self.frame = 0
+                new_attack.x, new_attack.y = self.x - 10, self.y - 25
                 new_attack.dir = 1
-                new_attack.frame = 1
-            missile_attacks.append(new_attack)
+                bomb_attacks.append(new_attack)
+        if (event.type, event.key) == (SDL_KEYUP, SDLK_s):
+            if self.state == self.RIGHT_THROW_BOMB:
+                self.state = self.RIGHT_RUN
+            elif self.state == self.LEFT_THROW_BOMB:
+                self.state = self.LEFT_RUN
         # 필살기 사용
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_d):
             #special_attack_file = open('special_attack_data.txt', 'r')
@@ -234,6 +248,7 @@ class Attack_effect():
     def draw(self):
         self.image.clip_draw(self.frame * 40, 0, 40, 37, self.x, self.y)
 
+
 class Attack_effect2():
     TIME_PER_ACTION = 0.5
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
@@ -255,6 +270,41 @@ class Attack_effect2():
 
     def draw(self):
         self.image.clip_draw(self.frame * 50, 0, 50, 50, self.x, self.y)
+
+
+class Bomb():
+    PIXEL_PER_METER = (10.0 / 0.2)
+    RUN_SPEED_KMPH = 10.0
+    RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+    RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+    RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+    TIME_PER_ACTION = 1.0
+    ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+    FRAMES_PER_ACTION = 4
+
+    image = None
+
+    def __init__(self):
+        self.x, self.y = 0, 0
+        self.frame = 0
+        self.total_frames = 0
+        self.speed = 0
+        self.dir = 0
+        if Bomb.image is None:
+            Bomb.image = load_image("bomb.png")
+
+    def update(self, frame_time):
+        self.speed = self.RUN_SPEED_PPS * frame_time
+        if self.dir == 0:
+            self.x += self.speed
+        if self.dir == 1:
+            self.x -= self.speed
+        self.total_frames += self.ACTION_PER_TIME * self.FRAMES_PER_ACTION * frame_time
+        self.frame = int(self.total_frames)
+
+    def draw(self):
+        self.image.clip_draw(self.frame * 20, 0, 20, 20, self.x, self.y)
 
 class Special_attack():
     PIXEL_PER_METER = (10.0 / 0.2)

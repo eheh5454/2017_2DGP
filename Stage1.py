@@ -183,6 +183,13 @@ def update_all_attack(frame_time):
         new_attack.update(frame_time)
         if new_attack.x > 800 or new_attack.x < 0:
             del (new_attack)
+    for new_bomb_attack in bomb_attacks:
+        new_bomb_attack.update(frame_time)
+        if new_bomb_attack.frame == 4:
+            bomb_attacks.remove(new_bomb_attack)
+            new_special_attack_effect = Special_attack_effect()
+            new_special_attack_effect.x, new_special_attack_effect.y = new_bomb_attack.x, new_bomb_attack.y
+            special_attack_effects.append(new_special_attack_effect)
     for attack_effect in attack_effects:
         attack_effect.update(frame_time)
         if attack_effect.frame == 5:
@@ -204,9 +211,11 @@ def update_all_attack(frame_time):
             special_attack_effects.remove(new_special_attack_effect)
 
 
+
 # 모든 공격과 이펙트 draw
 def draw_all_attack():
-    all_attacks = basic_attacks + missile_attacks + attack_effects + attack_effects2 + special_attacks + special_attack_effects
+    all_attacks = basic_attacks + missile_attacks + attack_effects + attack_effects2 + \
+                  special_attacks + special_attack_effects + bomb_attacks
     for attack in all_attacks:
         attack.draw()
 
@@ -233,23 +242,24 @@ def enter():
 def exit():
     global space, soldier, eye_monsters, basic_attacks, plant_monsters, power_monsters, attack_effects, \
         deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, missile_attacks, attack_effects2, \
-        special_attacks, special_attack_effects
-    del(space)
-    del(soldier)
-    del(eye_monsters)
-    del(basic_attacks)
-    del(plant_monsters)
-    del(power_monsters)
-    del(attack_effects)
-    del(attack_effects2)
-    del(missile_attacks)
-    del(swage_monsters)
-    del(deleted_ems)
-    del(deleted_pms)
-    del(deleted_plms)
-    del(deleted_sms)
-    del(special_attacks)
-    del(special_attack_effects)
+        special_attacks, special_attack_effects, bomb_attacks
+    del space
+    del soldier
+    del eye_monsters
+    del basic_attacks
+    del plant_monsters
+    del power_monsters
+    del attack_effects
+    del attack_effects2
+    del missile_attacks
+    del swage_monsters
+    del deleted_ems
+    del deleted_pms
+    del deleted_plms
+    del deleted_sms
+    del special_attacks
+    del special_attack_effects
+    del bomb_attacks
 
 
 def pause():
