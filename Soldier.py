@@ -6,6 +6,7 @@ missile_attacks = []
 special_attacks = []
 bomb_attacks = []
 
+
 special_attack_text = '{ \
     "attack1" : {"x":50, "y":550},"attack2" : {"x":150, "y":550},"attack3" : {"x":250, "y":550},"attack4" : {"x":350, "y":550},\
     "attack5" : {"x":450, "y":550},"attack6" : {"x":550, "y":550},"attack7" : {"x":650, "y":550},"attack8" : {"x":750, "y":550},\
@@ -42,6 +43,8 @@ class Soldier:
         self.frame = 0
         self.total_frames = 0
         self.hp = 50
+        self.bomb_count = 5
+        self.special_attack_count = 3
 
     def move(self):
         if self.UP:
@@ -57,8 +60,6 @@ class Soldier:
 
     def update(self, frame_time):
         self.runspeed = self.RUN_SPEED_PPS * frame_time
-        self.total_frames += self.FRAMES_PER_ACTION * self.ACTION_PER_TIME *frame_time
-        self.frame = int(self.total_frames) % 6
         self.move()
         # 오른쪽 데미지를 입었을때 프레임이 5가 되면 오른쪽 달리기 상태로 전환
         if self.state == self.RIGHT_DAMAGED and self.frame == 5:
@@ -66,12 +67,21 @@ class Soldier:
         # 왼쪽 데미지를 입었을떄 프레임이 5가 되면 왼쪽 달리기 상태로 전환
         if self.state == self.LEFT_DAMAGED and self.frame == 5:
             self.state = self.LEFT_RUN
+        # 오른쪽 공격 상태이거나 수류탄 던지기 상태일 때 프레임이 5가 되면 달리기 상태로 전환
+        if self.state in (self.RIGHT_ATTACK, self.RIGHT_THROW_BOMB) and self.frame == 5:
+            self.state = self.RIGHT_RUN
+        # 왼쪽 공격 상태이거나 수류탄 던지기 상태일 때 프레임이 5가 되면 달리기 상태롤 전환
+        if self.state in (self.LEFT_ATTACK, self.LEFT_THROW_BOMB) and self.frame == 5:
+            self.state = self.LEFT_RUN
+        self.total_frames += self.FRAMES_PER_ACTION * self.ACTION_PER_TIME * frame_time
+        self.frame = int(self.total_frames) % 6
+
 
     def draw(self):
         self.image.clip_draw(self.frame*50, self.state * 80, 50, 80, self.x, self.y)
 
     def handle_events(self, event):
-        global RIGHT, LEFT, UP, DOWN
+        global RIGHT, LEFT, UP, DOWN, bomb_count, special_attack_count
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_RIGHT):
             self.RIGHT = True
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_LEFT):
@@ -88,60 +98,59 @@ class Soldier:
             self.UP = False
         if (event.type, event.key) == (SDL_KEYUP, SDLK_DOWN):
             self.DOWN = False
+        # a키를 누르면 공격
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_a):
             new_attack = Basic_attack()
             # RIGHT_RUN state 이면 오른쪽 발사
-            if self.state == self.RIGHT_RUN:
+            if self.state in (self.RIGHT_RUN, self.RIGHT_ATTACK):
                new_attack.x, new_attack.y = self.x + 10, self. y
                self.state = self.RIGHT_ATTACK
                self.frame = 0
                basic_attacks.append(new_attack)
             # LEFT_RUN state 이면 왼쪽 발사
-            elif self.state == self.LEFT_RUN:
+            elif self.state in (self.LEFT_RUN, self.LEFT_ATTACK):
                 new_attack.x, new_attack.y = self.x - 10, self.y
                 new_attack.dir = 1
                 new_attack.frame = 1
                 self.state = self.LEFT_ATTACK
                 self.frame = 0
                 basic_attacks.append(new_attack)
-        # a키를 놓을 때는 공격상태에서 원래 상태로 전환
-        if (event.type, event.key) == (SDL_KEYUP, SDLK_a):
-            if self.state == self.RIGHT_ATTACK:
-                self.state = self.RIGHT_RUN
-            elif self.state == self.LEFT_ATTACK:
-                self.state = self.LEFT_RUN
         # s키를 누르면 수류탄 투척
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_s):
-            new_attack = Bomb()
-            # RIGHT_RUN state 이면 오른쪽 발사
-            if self.state == self.RIGHT_RUN:
-                self.state = self.RIGHT_THROW_BOMB
-                self.frame = 0
-                new_attack.x, new_attack.y = self.x + 10, self.y - 25
-                bomb_attacks.append(new_attack)
-            # LEFT_RUN state 이면 왼쪽 발사
-            elif self.state == self.LEFT_RUN:
-                self.state = self.LEFT_THROW_BOMB
-                self.frame = 0
-                new_attack.x, new_attack.y = self.x - 10, self.y - 25
-                new_attack.dir = 1
-                bomb_attacks.append(new_attack)
-        if (event.type, event.key) == (SDL_KEYUP, SDLK_s):
-            if self.state == self.RIGHT_THROW_BOMB:
-                self.state = self.RIGHT_RUN
-            elif self.state == self.LEFT_THROW_BOMB:
-                self.state = self.LEFT_RUN
+            if self.bomb_count <= 0:
+                pass
+            else:
+                new_attack = Bomb()
+                # RIGHT_RUN state 이면 오른쪽 발사
+                if self.state in (self.RIGHT_RUN, self.RIGHT_THROW_BOMB):
+                    self.state = self.RIGHT_THROW_BOMB
+                    self.frame = 0
+                    new_attack.x, new_attack.y = self.x + 10, self.y - 25
+                    bomb_attacks.append(new_attack)
+                    self.bomb_count -= 1
+                # LEFT_RUN state 이면 왼쪽 발사
+                elif self.state in (self.LEFT_RUN, self.LEFT_THROW_BOMB):
+                    self.state = self.LEFT_THROW_BOMB
+                    self.frame = 0
+                    new_attack.x, new_attack.y = self.x - 10, self.y - 25
+                    new_attack.dir = 1
+                    bomb_attacks.append(new_attack)
+                    self.bomb_count -= 1
         # 필살기 사용
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_d):
+            if self.special_attack_count <= 0:
+                pass
+            else:
             #special_attack_file = open('special_attack_data.txt', 'r')
             #special_attack_data = json.load(special_attack_file)
             #special_attack_file.close()
-            special_attack_data = json.loads(special_attack_text)
-            for data in special_attack_data:
-                special_attack = Special_attack()
-                special_attack.x = special_attack_data[data]['x']
-                special_attack.y = special_attack_data[data]['y']
-                special_attacks.append(special_attack)
+                special_attack_data = json.loads(special_attack_text)
+                for data in special_attack_data:
+                    special_attack = Special_attack()
+                    special_attack.x = special_attack_data[data]['x']
+                    special_attack.y = special_attack_data[data]['y']
+                    special_attacks.append(special_attack)
+                self.special_attack_count -= 1
 
     def get_bb(self):
         return self.x - 25, self.y - 45, self.x + 25, self.y + 45

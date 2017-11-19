@@ -6,12 +6,15 @@ from Resource import *
 from Soldier import *
 from Monsters import *
 import json
+import Game_over
 
 current_time = get_time()
 eye_monstertime = 0
 plant_monstertime = 0
 power_monstertime = 0
 swage_monstertime = 0
+
+Score = 0
 
 # 맵크기 = 800X600픽셀, 1600cm x 1200cm, 16m x 12m
 class Space:
@@ -108,6 +111,7 @@ def collision_attack_monster():
 
 # 모든 몬스터 update, 몬스터가 죽으면 deleted 이펙트 그 좌표에 추가
 def update_all_monster(frame_time):
+    global Score
     collision_attack_monster()
     for new_eye_monster in eye_monsters:
         new_eye_monster.update(frame_time)
@@ -116,6 +120,7 @@ def update_all_monster(frame_time):
             new_deleted_em.x, new_deleted_em.y = new_eye_monster.x, new_eye_monster.y
             deleted_ems.append(new_deleted_em)
             eye_monsters.remove(new_eye_monster)
+            Score += 5
     for new_plant_monster in plant_monsters:
         new_plant_monster.update(frame_time)
         if new_plant_monster.hp <= 0:
@@ -123,6 +128,7 @@ def update_all_monster(frame_time):
             new_deleted_plm.x, new_deleted_plm.y = new_plant_monster.x, new_plant_monster.y
             deleted_plms.append(new_deleted_plm)
             plant_monsters.remove(new_plant_monster)
+            Score += 10
     for new_power_monster in power_monsters:
         new_power_monster.update(frame_time)
         if new_power_monster.hp <= 0:
@@ -130,6 +136,7 @@ def update_all_monster(frame_time):
             new_deleted_pm.x, new_deleted_pm.y = new_power_monster.x, new_power_monster.y
             deleted_pms.append(new_deleted_pm)
             power_monsters.remove(new_power_monster)
+            Score += 7
     for new_swage_monster in swage_monsters:
         new_swage_monster.update(frame_time)
         if new_swage_monster.hp <= 0:
@@ -137,6 +144,7 @@ def update_all_monster(frame_time):
             new_deleted_sm.x, new_deleted_sm.y = new_swage_monster.x, new_swage_monster.y
             deleted_sms.append(new_deleted_sm)
             swage_monsters.remove(new_swage_monster)
+            Score += 6
 
 
 # 모든 몬스터 draw
@@ -220,11 +228,24 @@ def draw_all_attack():
         attack.draw()
 
 
+class UI():
+    def __init__(self):
+        self.font = load_font('ENCR10B.TTF', 30)
+
+    def draw(self):
+        global special_attack_count, bomb_count
+        self.font.draw(20, 550, 'Life:%d' % soldier.hp, (220, 220, 0))
+        self.font.draw(20, 520, 'Score:%d' % Score, (220, 220, 0))
+        self.font.draw(500, 550, "Special Attack:%d" % soldier.special_attack_count, (220, 220, 0))
+        self.font.draw(680, 520, "Bomb:%d" % soldier.bomb_count, (220, 220, 0))
+
+
 def enter():
     global space, soldier, eye_monsters, plant_monsters, power_monsters, attack_effects, \
-        deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, attack_effects2, special_attack_effects
+        deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, attack_effects2, special_attack_effects, ui
     space = Space()
     soldier = Soldier()
+    ui = UI()
     attack_effects = []
     attack_effects2 = []
     special_attack_effects = []
@@ -242,7 +263,7 @@ def enter():
 def exit():
     global space, soldier, eye_monsters, basic_attacks, plant_monsters, power_monsters, attack_effects, \
         deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, missile_attacks, attack_effects2, \
-        special_attacks, special_attack_effects, bomb_attacks
+        special_attacks, special_attack_effects, bomb_attacks, ui
     del space
     del soldier
     del eye_monsters
@@ -260,6 +281,7 @@ def exit():
     del special_attacks
     del special_attack_effects
     del bomb_attacks
+    del ui
 
 
 def pause():
@@ -275,6 +297,8 @@ def handle_events():
     for event in events:
         if event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_q:
+            game_framework.change_state(Game_over)
         else:
             soldier.handle_events(event)
 
@@ -298,4 +322,6 @@ def draw():
     draw_all_monster()
     draw_all_attack()
     deleted_effect_draw()
+    ui.draw()
     update_canvas()
+
