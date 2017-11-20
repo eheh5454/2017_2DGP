@@ -57,7 +57,7 @@ def collision_check(a, b):
 
     if left_a > right_b: return False
     if right_a < left_b: return False
-    if top_a < bottom_b : return False
+    if top_a < bottom_b: return False
     if bottom_a > top_b: return False
 
     return True
@@ -65,23 +65,23 @@ def collision_check(a, b):
 
 # soldier 와 monster 의 충돌 처리
 def collision_soldier_monster():
-    all_monster = eye_monsters + power_monsters + plant_monsters + swage_monsters
-    for monster in all_monster:
-        if collision_check(monster, soldier):
+    for monster in all_monsters:
+        if collision_check(soldier,monster):
             # DAMAGED 상황일 때는 제외하고 충돌 처리, 충돌이 발생하면 state 를 DAMAGED 로 전환하고 frame 초기화
-            if soldier.state == (soldier.RIGHT_RUN or soldier.RIGHT_ATTACK or soldier.RIGHT_THROW_BOMB):
+            if soldier.state in (soldier.RIGHT_RUN, soldier.RIGHT_ATTACK, soldier.RIGHT_THROW_BOMB):
                 soldier.state = soldier.RIGHT_DAMAGED
                 soldier.frame = 0
-                soldier.hp -= 5
-            if soldier.state == (soldier.LEFT_RUN or soldier.LEFT_DAMAGED or soldier.LEFT_THROW_BOMB):
+                monster.hp = 0
+                soldier.hp -= 2.5
+            elif soldier.state in (soldier.LEFT_RUN, soldier.LEFT_DAMAGED, soldier.LEFT_THROW_BOMB):
                 soldier.state = soldier.LEFT_DAMAGED
                 soldier.frame = 0
-                soldier.hp -= 5
+                monster.hp = 0
+                soldier.hp -= 2.5
 
 
 # attack 과 monster 의 충돌 처리
 def collision_attack_monster():
-    all_monsters = power_monsters + eye_monsters + swage_monsters + plant_monsters
     # basic_attack 과 monster 의 충돌 처리
     for new_attack in basic_attacks:
         for monster in all_monsters:
@@ -107,6 +107,13 @@ def collision_attack_monster():
         for monster in all_monsters:
             if collision_check(new_attack, monster):
                 monster.hp -= 30
+    for new_bomb_attack in bomb_attacks:
+        for monster in all_monsters:
+            if collision_check(new_bomb_attack, monster):
+                bomb_attacks.remove(new_bomb_attack)
+                new_special_attack_effect = Special_attack_effect()
+                new_special_attack_effect.x, new_special_attack_effect.y = new_bomb_attack.x, new_bomb_attack.y
+                special_attack_effects.append(new_special_attack_effect)
 
 
 # 모든 몬스터 update, 몬스터가 죽으면 deleted 이펙트 그 좌표에 추가
@@ -149,7 +156,6 @@ def update_all_monster(frame_time):
 
 # 모든 몬스터 draw
 def draw_all_monster():
-    all_monsters = eye_monsters + power_monsters + plant_monsters + swage_monsters
     for monster in all_monsters:
         monster.draw()
 
@@ -219,7 +225,6 @@ def update_all_attack(frame_time):
             special_attack_effects.remove(new_special_attack_effect)
 
 
-
 # 모든 공격과 이펙트 draw
 def draw_all_attack():
     all_attacks = basic_attacks + missile_attacks + attack_effects + attack_effects2 + \
@@ -241,7 +246,7 @@ class UI():
 
 
 def enter():
-    global space, soldier, eye_monsters, plant_monsters, power_monsters, attack_effects, \
+    global space, soldier, eye_monsters, plant_monsters, power_monsters, attack_effects, all_monsters, \
         deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, attack_effects2, special_attack_effects, ui
     space = Space()
     soldier = Soldier()
@@ -257,6 +262,7 @@ def enter():
     deleted_pms = []
     deleted_plms = []
     deleted_sms = []
+    all_monsters = eye_monsters + plant_monsters + power_monsters + swage_monsters
 
 
 
@@ -304,7 +310,7 @@ def handle_events():
 
 
 def update():
-    global current_time
+    global current_time, all_monsters
     frame_time = get_time() - current_time
     soldier.update(frame_time)
     make_all_monster(frame_time)
@@ -313,12 +319,14 @@ def update():
     update_all_attack(frame_time)
     collision_soldier_monster()
     current_time += frame_time
+    all_monsters = eye_monsters + plant_monsters + power_monsters + swage_monsters
 
 
 def draw():
     clear_canvas()
     space.draw()
     soldier.draw()
+    soldier.draw_bb()
     draw_all_monster()
     draw_all_attack()
     deleted_effect_draw()

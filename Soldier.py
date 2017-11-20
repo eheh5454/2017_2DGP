@@ -27,7 +27,7 @@ class Soldier:
     RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
     RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
-    TIME_PER_ACTION = 0.5
+    TIME_PER_ACTION = 0.7
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 6
 
@@ -44,6 +44,7 @@ class Soldier:
         self.total_frames = 0
         self.hp = 50
         self.bomb_count = 5
+        self.time = 0
         self.special_attack_count = 3
 
     def move(self):
@@ -62,11 +63,17 @@ class Soldier:
         self.runspeed = self.RUN_SPEED_PPS * frame_time
         self.move()
         # 오른쪽 데미지를 입었을때 프레임이 5가 되면 오른쪽 달리기 상태로 전환
-        if self.state == self.RIGHT_DAMAGED and self.frame == 5:
-            self.state = self.RIGHT_RUN
+        if self.state == self.RIGHT_DAMAGED:
+            self.time += frame_time
+            if self.time > 1.0:
+                self.state = self.RIGHT_RUN
+                self.time = 0
         # 왼쪽 데미지를 입었을떄 프레임이 5가 되면 왼쪽 달리기 상태로 전환
-        if self.state == self.LEFT_DAMAGED and self.frame == 5:
-            self.state = self.LEFT_RUN
+        if self.state == self.LEFT_DAMAGED:
+            self.time += frame_time
+            if self.time > 1.0:
+                self.state = self.LEFT_RUN
+                self.time = 0
         # 오른쪽 공격 상태이거나 수류탄 던지기 상태일 때 프레임이 5가 되면 달리기 상태로 전환
         if self.state in (self.RIGHT_ATTACK, self.RIGHT_THROW_BOMB) and self.frame == 5:
             self.state = self.RIGHT_RUN
@@ -76,16 +83,21 @@ class Soldier:
         self.total_frames += self.FRAMES_PER_ACTION * self.ACTION_PER_TIME * frame_time
         self.frame = int(self.total_frames) % 6
 
-
     def draw(self):
         self.image.clip_draw(self.frame*50, self.state * 80, 50, 80, self.x, self.y)
 
     def handle_events(self, event):
         global RIGHT, LEFT, UP, DOWN, bomb_count, special_attack_count
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_RIGHT):
-            self.RIGHT = True
+            if self.state in (self.RIGHT_DAMAGED, self.LEFT_DAMAGED):
+                pass
+            else:
+                self.RIGHT = True
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_LEFT):
-            self.LEFT = True
+            if self.state in (self.RIGHT_DAMAGED, self.LEFT_DAMAGED):
+                pass
+            else:
+                self.LEFT = True
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_UP):
             self.UP = True
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_DOWN):
@@ -153,7 +165,7 @@ class Soldier:
                 self.special_attack_count -= 1
 
     def get_bb(self):
-        return self.x - 25, self.y - 45, self.x + 25, self.y + 45
+        return self.x - 20, self.y - 40, self.x + 20, self.y + 40
 
     def draw_bb(self):
         draw_rectangle(*self.get_bb())
@@ -311,6 +323,9 @@ class Bomb():
             self.x -= self.speed
         self.total_frames += self.ACTION_PER_TIME * self.FRAMES_PER_ACTION * frame_time
         self.frame = int(self.total_frames)
+
+    def get_bb(self):
+        return self.x - 10, self.y - 10, self.x + 10, self.y + 10
 
     def draw(self):
         self.image.clip_draw(self.frame * 20, 0, 20, 20, self.x, self.y)
