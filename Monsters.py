@@ -1,6 +1,10 @@
 from pico2d import *
 import random
 
+eye_monstertime = 0
+plant_monstertime = 0
+power_monstertime = 0
+swage_monstertime = 0
 
 # eye_monster의 크기 = 70x70 픽셀, 140cm x 140cm
 class Eye_monster:
@@ -23,6 +27,7 @@ class Eye_monster:
         if Eye_monster.image is None:
            Eye_monster.image = load_image('Eye_monster.png')
         self.hp = 20
+        vector = [-1, 1]
         self.xrunspeed = self.RUN_SPEED_PPS
         self.yrunspeed = self.RUN_SPEED_PPS
         self.power = 5

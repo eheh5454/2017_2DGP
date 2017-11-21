@@ -4,17 +4,20 @@ import Stage1
 
 image = None
 space = None
+font = None
 
 def enter():
-    global image, space
+    global image, space, font
     image = load_image('game_over.png')
     space = load_image('Space.jpg')
+    font = load_font('ENCR10B.TTF', 50)
 
 
 def exit():
-    global image, space
+    global image, space, font
     del image
     del space
+    del font
 
 
 def update():
@@ -26,6 +29,7 @@ def draw():
     clear_canvas()
     space.draw(400, 300)
     image.draw(400, 300)
+    font.draw(200, 400, 'Your Score:%d' % Stage1.Score, (220, 220, 0))
     update_canvas()
 
 

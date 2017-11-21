@@ -165,11 +165,11 @@ class Soldier:
 
     # 위쪽 충돌박스
     def get_bb(self):
-        return self.x - 20, self.y - 0.1, self.x + 20, self.y + 0.1
+        return self.x - 15, self.y - 40, self.x + 15, self.y + 40
 
     # 아래쪽 충돌박스
     def get_bb2(self):
-        return self.x - 0.1, self.y - 40, self.x + 0.1, self.y + 40
+        return self.x - 20, self.y - 20, self.x + 20, self.y + 20
 
     def draw_bb(self):
         draw_rectangle(*self.get_bb())
@@ -252,6 +252,7 @@ class Missile_attack:
         draw_rectangle(*self.get_bb())
 
 
+# basic_attack effect
 class Attack_effect():
     TIME_PER_ACTION = 0.5
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
@@ -275,6 +276,7 @@ class Attack_effect():
         self.image.clip_draw(self.frame * 40, 0, 40, 37, self.x, self.y)
 
 
+# upgrade된 attack의 effect
 class Attack_effect2():
     TIME_PER_ACTION = 0.5
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
@@ -300,7 +302,7 @@ class Attack_effect2():
 
 class Bomb():
     PIXEL_PER_METER = (10.0 / 0.2)
-    RUN_SPEED_KMPH = 10.0
+    RUN_SPEED_KMPH = 15.0
     RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
     RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
     RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -334,6 +336,7 @@ class Bomb():
 
     def draw(self):
         self.image.clip_draw(self.frame * 20, 0, 20, 20, self.x, self.y)
+
 
 class Special_attack():
     PIXEL_PER_METER = (10.0 / 0.2)
