@@ -5,7 +5,7 @@ import random
 # eye_monster의 크기 = 70x70 픽셀, 140cm x 140cm
 class Eye_monster:
     PIXEL_PER_METER = (10.0 / 0.2)
-    RUN_SPEED_KMPH = 30.0
+    RUN_SPEED_KMPH = 20.0
     RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
     RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
     RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -25,6 +25,7 @@ class Eye_monster:
         self.hp = 20
         self.xrunspeed = self.RUN_SPEED_PPS
         self.yrunspeed = self.RUN_SPEED_PPS
+        self.power = 5
 
     def update(self, frame_time):
         self.total_frames += self.FRAMES_PER_ACTION * self.ACTION_PER_TIME * frame_time
@@ -53,7 +54,7 @@ class Eye_monster:
 # plant_monster의 크기 = 130 x 150픽셀, 260cm x 300cm
 class Plant_monster:
     PIXEL_PER_METER = (10.0 / 0.2)
-    RUN_SPEED_KMPH = 20.0
+    RUN_SPEED_KMPH = 10.0
     RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
     RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
     RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -73,6 +74,7 @@ class Plant_monster:
         self.hp = 40
         self.xrunspeed = -self.RUN_SPEED_PPS
         self.yrunspeed = self.RUN_SPEED_PPS
+        self.power = 10
 
 
     def update(self, frame_time):
@@ -102,7 +104,7 @@ class Plant_monster:
 # power_monster의 크기 = 80 x 100 픽셀, 160cm x 200cm
 class Power_monster:
     PIXEL_PER_METER = (10.0 / 0.2)
-    RUN_SPEED_KMPH = 25.0
+    RUN_SPEED_KMPH = 15.0
     RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
     RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
     RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -122,6 +124,7 @@ class Power_monster:
         self.hp = 30
         self.xrunspeed = self.RUN_SPEED_PPS
         self.yrunspeed = -self.RUN_SPEED_PPS
+        self.power = 10
 
     def update(self, frame_time):
         self.total_frames += self.FRAMES_PER_ACTION * self.ACTION_PER_TIME * frame_time
@@ -150,7 +153,7 @@ class Power_monster:
 # 80 x 90 픽셀, 160cm x 180cm
 class Swage_monster:
     PIXEL_PER_METER = (10.0 / 0.2)
-    RUN_SPEED_KMPH = 20.0
+    RUN_SPEED_KMPH = 15.0
     RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
     RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
     RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -170,6 +173,7 @@ class Swage_monster:
         self.hp = 30
         self.xrunspeed = -self.RUN_SPEED_PPS
         self.yrunspeed = -self.RUN_SPEED_PPS
+        self.power = 10
 
 
     def update(self, frame_time):

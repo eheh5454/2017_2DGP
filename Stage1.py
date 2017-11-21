@@ -16,6 +16,7 @@ swage_monstertime = 0
 
 Score = 0
 
+
 # 맵크기 = 800X600픽셀, 1600cm x 1200cm, 16m x 12m
 class Space:
     def __init__(self):
@@ -63,21 +64,33 @@ def collision_check(a, b):
     return True
 
 
+def new_collison_check(a,b):
+    left_a, bottom_a, right_a, top_a = a.get_bb2()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+
+    return True
+
+
 # soldier 와 monster 의 충돌 처리
 def collision_soldier_monster():
     for monster in all_monsters:
-        if collision_check(soldier,monster):
+        if collision_check(soldier, monster) or new_collison_check(soldier, monster):
             # DAMAGED 상황일 때는 제외하고 충돌 처리, 충돌이 발생하면 state 를 DAMAGED 로 전환하고 frame 초기화
             if soldier.state in (soldier.RIGHT_RUN, soldier.RIGHT_ATTACK, soldier.RIGHT_THROW_BOMB):
                 soldier.state = soldier.RIGHT_DAMAGED
                 soldier.frame = 0
                 monster.hp = 0
-                soldier.hp -= 2.5
+                soldier.hp -= monster.power
             elif soldier.state in (soldier.LEFT_RUN, soldier.LEFT_DAMAGED, soldier.LEFT_THROW_BOMB):
                 soldier.state = soldier.LEFT_DAMAGED
                 soldier.frame = 0
                 monster.hp = 0
-                soldier.hp -= 2.5
+                soldier.hp -= monster.power
 
 
 # attack 과 monster 의 충돌 처리
@@ -320,6 +333,8 @@ def update():
     collision_soldier_monster()
     current_time += frame_time
     all_monsters = eye_monsters + plant_monsters + power_monsters + swage_monsters
+    if soldier.hp <= 0:
+        game_framework.change_state(Game_over)
 
 
 def draw():

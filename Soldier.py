@@ -1,5 +1,6 @@
 from pico2d import *
 import json
+import Stage1
 
 basic_attacks = []
 missile_attacks = []
@@ -42,9 +43,8 @@ class Soldier:
         self.image = load_image('soldier2.png')
         self.frame = 0
         self.total_frames = 0
-        self.hp = 50
+        self.hp = 100
         self.bomb_count = 5
-        self.time = 0
         self.special_attack_count = 3
 
     def move(self):
@@ -64,16 +64,12 @@ class Soldier:
         self.move()
         # 오른쪽 데미지를 입었을때 프레임이 5가 되면 오른쪽 달리기 상태로 전환
         if self.state == self.RIGHT_DAMAGED:
-            self.time += frame_time
-            if self.time > 1.0:
+            if self.frame == 5:
                 self.state = self.RIGHT_RUN
-                self.time = 0
         # 왼쪽 데미지를 입었을떄 프레임이 5가 되면 왼쪽 달리기 상태로 전환
         if self.state == self.LEFT_DAMAGED:
-            self.time += frame_time
-            if self.time > 1.0:
+            if self.frame == 5:
                 self.state = self.LEFT_RUN
-                self.time = 0
         # 오른쪽 공격 상태이거나 수류탄 던지기 상태일 때 프레임이 5가 되면 달리기 상태로 전환
         if self.state in (self.RIGHT_ATTACK, self.RIGHT_THROW_BOMB) and self.frame == 5:
             self.state = self.RIGHT_RUN
@@ -89,14 +85,8 @@ class Soldier:
     def handle_events(self, event):
         global RIGHT, LEFT, UP, DOWN, bomb_count, special_attack_count
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_RIGHT):
-            if self.state in (self.RIGHT_DAMAGED, self.LEFT_DAMAGED):
-                pass
-            else:
                 self.RIGHT = True
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_LEFT):
-            if self.state in (self.RIGHT_DAMAGED, self.LEFT_DAMAGED):
-                pass
-            else:
                 self.LEFT = True
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_UP):
             self.UP = True
@@ -112,13 +102,19 @@ class Soldier:
             self.DOWN = False
         # a키를 누르면 공격
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_a):
-            new_attack = Basic_attack()
+            if Stage1.Score >= 100:
+                new_attack = Missile_attack()
+            else:
+                new_attack = Basic_attack()
             # RIGHT_RUN state 이면 오른쪽 발사
             if self.state in (self.RIGHT_RUN, self.RIGHT_ATTACK):
                new_attack.x, new_attack.y = self.x + 10, self. y
                self.state = self.RIGHT_ATTACK
                self.frame = 0
-               basic_attacks.append(new_attack)
+               if new_attack == Missile_attack():
+                   missile_attacks.append(new_attack)
+               else:
+                   basic_attacks.append(new_attack)
             # LEFT_RUN state 이면 왼쪽 발사
             elif self.state in (self.LEFT_RUN, self.LEFT_ATTACK):
                 new_attack.x, new_attack.y = self.x - 10, self.y
@@ -126,7 +122,10 @@ class Soldier:
                 new_attack.frame = 1
                 self.state = self.LEFT_ATTACK
                 self.frame = 0
-                basic_attacks.append(new_attack)
+                if new_attack == Missile_attack():
+                    missile_attacks.append(new_attack)
+                else:
+                    basic_attacks.append(new_attack)
         # s키를 누르면 수류탄 투척
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_s):
             if self.bomb_count <= 0:
@@ -164,11 +163,17 @@ class Soldier:
                     special_attacks.append(special_attack)
                 self.special_attack_count -= 1
 
+    # 위쪽 충돌박스
     def get_bb(self):
-        return self.x - 20, self.y - 40, self.x + 20, self.y + 40
+        return self.x - 20, self.y - 0.1, self.x + 20, self.y + 0.1
+
+    # 아래쪽 충돌박스
+    def get_bb2(self):
+        return self.x - 0.1, self.y - 40, self.x + 0.1, self.y + 40
 
     def draw_bb(self):
         draw_rectangle(*self.get_bb())
+        draw_rectangle(*self.get_bb2())
 
 
 class Basic_attack:
