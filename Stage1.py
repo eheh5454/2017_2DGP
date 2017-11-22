@@ -30,18 +30,30 @@ def make_all_monster(frame_time):
     power_monstertime += frame_time
     swage_monstertime += frame_time
     if eye_monstertime > 5:
+        if current_time > 30:
+            new_eye_monster = Eye_monster()
+            eye_monsters.append(new_eye_monster)
         new_eye_monster = Eye_monster()
         eye_monsters.append(new_eye_monster)
         eye_monstertime = 0
     if plant_monstertime > 10:
+        if current_time > 60:
+            new_plant_monster = Plant_monster()
+            eye_monsters.append(new_plant_monster)
         new_plant_monster = Plant_monster()
         plant_monsters.append(new_plant_monster)
         plant_monstertime = 0
     if power_monstertime > 7:
+        if current_time > 40:
+            new_power_monster = Power_monster()
+            power_monsters.append(new_power_monster)
         new_power_monster = Power_monster()
         power_monsters.append(new_power_monster)
         power_monstertime = 0
     if swage_monstertime > 7:
+        if current_time > 50:
+            new_swage_monster = Swage_monster()
+            swage_monsters.append(new_swage_monster)
         new_swage_monster = Swage_monster()
         swage_monsters.append(new_swage_monster)
         swage_monstertime = 0
@@ -227,11 +239,11 @@ def make_items(frame_time):
     global special_attack_items_time, bomb_item_time
     special_attack_items_time += frame_time
     bomb_item_time += frame_time
-    if special_attack_items_time >= 10:
+    if special_attack_items_time >= 60:
         new_item = Special_attack_item()
         special_attack_items.append(new_item)
         special_attack_items_time = 0
-    if bomb_item_time >= 5:
+    if bomb_item_time >= 30:
         new_item = Bomb_item()
         bomb_items.append(new_item)
         bomb_item_time = 0
@@ -349,8 +361,6 @@ def handle_events():
 def update():
     global current_time
     frame_time = get_time() - current_time
-    if soldier.hp <= 0:
-        game_framework.change_state(Game_over)
     collision_attack_monster()
     collision_soldier_monster()
     soldier.update(frame_time)
@@ -361,6 +371,8 @@ def update():
     make_items(frame_time)
     update_all_items(frame_time)
     current_time += frame_time
+    if soldier.hp <= 0:
+        game_framework.change_state(Game_over)
 
 
 def draw():

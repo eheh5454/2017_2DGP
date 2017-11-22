@@ -368,6 +368,7 @@ class Special_attack():
     def draw(self):
         self.image.clip_draw(self.frame * 40, 0, 40, 40, self.x, self.y)
 
+
 class Special_attack_effect():
     TIME_PER_ACTION = 1.0
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION

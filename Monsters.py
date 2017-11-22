@@ -21,7 +21,7 @@ class Eye_monster:
     image = None
 
     def __init__(self):
-        self.x, self.y = random.randint(0, 50), random.randint(0, 50)
+        self.x, self.y = random.randint(0, 100), random.randint(0, 100)
         self.frame = 0
         self.total_frames = 0
         if Eye_monster.image is None:
@@ -29,7 +29,7 @@ class Eye_monster:
         self.hp = 20
         vector = [-1, 1]
         self.xrunspeed = self.RUN_SPEED_PPS
-        self.yrunspeed = self.RUN_SPEED_PPS
+        self.yrunspeed = random.choice(vector) * self.RUN_SPEED_PPS
         self.power = 5
 
     def update(self, frame_time):
@@ -71,14 +71,15 @@ class Plant_monster:
     image = None
 
     def __init__(self):
-        self.x, self.y = random.randint(750, 800), random.randint(0, 50)
+        self.x, self.y = random.randint(700, 800), random.randint(0, 100)
         self.frame = 0
         self.total_frames = 0
         if Plant_monster.image is None:
             self.image = load_image('Plant_monster.png')
         self.hp = 40
+        vector = [-1, 1]
         self.xrunspeed = -self.RUN_SPEED_PPS
-        self.yrunspeed = self.RUN_SPEED_PPS
+        self.yrunspeed = random.choice(vector) * self.RUN_SPEED_PPS
         self.power = 10
 
 
@@ -121,14 +122,15 @@ class Power_monster:
     image = None
 
     def __init__(self):
-        self.x, self.y = random.randint(0, 50), random.randint(550, 600)
+        self.x, self.y = random.randint(0, 100), random.randint(500, 600)
         self.frame = 0
         self.total_frames = 0
         if Power_monster.image is None:
            Power_monster.image = load_image('Power_monster.png')
         self.hp = 30
+        vector = [-1, 1]
         self.xrunspeed = self.RUN_SPEED_PPS
-        self.yrunspeed = -self.RUN_SPEED_PPS
+        self.yrunspeed = random.choice(vector) * self.RUN_SPEED_PPS
         self.power = 10
 
     def update(self, frame_time):
@@ -170,7 +172,8 @@ class Swage_monster:
     image = None
 
     def __init__(self):
-        self.x, self.y = random.randint(750, 800), random.randint(550, 600)
+        vector = [-1, 1]
+        self.x, self.y = random.randint(700, 800), random.randint(500, 600)
         self.frame = 0
         self.total_frames = 0
         if Swage_monster.image is None:
