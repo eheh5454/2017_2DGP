@@ -40,7 +40,7 @@ class Soldier:
     def __init__(self):
         self.x, self.y = 400, 300
         self.state = self.RIGHT_RUN
-        self.image = load_image('soldier2.png')
+        self.image = load_image('soldier.png')
         self.frame = 0
         self.total_frames = 0
         self.hp = 100
@@ -214,6 +214,7 @@ class Basic_attack:
         draw_rectangle(*self.get_bb())
 
 
+# upgrade된 attack
 class Missile_attack:
     PIXEL_PER_METER = (10.0 / 0.2)
     RUN_SPEED_KMPH = 60.0
@@ -261,8 +262,8 @@ class Attack_effect():
     image = None
 
     def __init__(self):
-        self.x = 10
-        self.y = 10
+        self.x = 0
+        self.y = 0
         self.frame = 0
         self.total_frames = 0
         if Attack_effect.image is None:
@@ -276,7 +277,7 @@ class Attack_effect():
         self.image.clip_draw(self.frame * 40, 0, 40, 37, self.x, self.y)
 
 
-# upgrade된 attack의 effect
+# missile_attack 의 effect, 크기만 키웠다.
 class Attack_effect2():
     TIME_PER_ACTION = 0.5
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
@@ -285,8 +286,8 @@ class Attack_effect2():
     image = None
 
     def __init__(self):
-        self.x = 10
-        self.y = 10
+        self.x = 0
+        self.y = 0
         self.frame = 0
         self.total_frames = 0
         if Attack_effect.image is None:
@@ -370,7 +371,7 @@ class Special_attack():
 
 
 class Special_attack_effect():
-    TIME_PER_ACTION = 1.0
+    TIME_PER_ACTION = 0.5
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 6
 

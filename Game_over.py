@@ -1,6 +1,6 @@
 from pico2d import *
 import game_framework
-import Stage1
+
 
 image = None
 space = None

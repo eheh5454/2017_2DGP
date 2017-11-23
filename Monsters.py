@@ -213,7 +213,7 @@ class Deleted_em:
     FRAMES_PER_ACTION = 4
 
     def __init__(self):
-        self.image = load_image("deleted_em2.png")
+        self.image = load_image("deleted_em.png")
         self.frame = 0
         self.total_frames = 0
         self.x, self.y = 0, 0
@@ -232,7 +232,7 @@ class Deleted_pm:
     FRAMES_PER_ACTION = 4
 
     def __init__(self):
-        self.image = load_image("deleted_pm2.png")
+        self.image = load_image("deleted_pm.png")
         self.frame = 0
         self.total_frames = 0
         self.x, self.y = 0, 0
@@ -251,7 +251,7 @@ class Deleted_plm:
     FRAMES_PER_ACTION = 4
 
     def __init__(self):
-        self.image = load_image("deleted_plm2.png")
+        self.image = load_image("deleted_plm.png")
         self.frame = 0
         self.total_frames = 0
         self.x, self.y = 0, 0
@@ -270,7 +270,7 @@ class Deleted_sm:
     FRAMES_PER_ACTION = 4
 
     def __init__(self):
-        self.image = load_image("deleted_sm2.png")
+        self.image = load_image("deleted_sm.png")
         self.frame = 0
         self.total_frames = 0
         self.x, self.y = 0, 0

@@ -12,6 +12,20 @@ current_time = get_time()
 
 Score = 0
 
+space = None
+soldier = None
+ui = None
+attack_effects = None
+attack_effects2 = None
+special_attack_effects = None
+eye_monsters = None
+plant_monsters = None
+power_monsters = None
+swage_monsters = None
+deleted_ems = None
+deleted_pms = None
+deleted_plms = None
+deleted_sms = None
 
 # 맵크기 = 800X600픽셀, 1600cm x 1200cm, 16m x 12m
 class Space:
@@ -24,7 +38,8 @@ class Space:
 
 # 시간에 따라 monster 를 만들어주는 함수
 def make_all_monster(frame_time):
-    global eye_monstertime, plant_monstertime, power_monstertime, swage_monstertime
+    global eye_monstertime, plant_monstertime, power_monstertime, swage_monstertime, eye_monsters, power_monsters, \
+           plant_monsters, swage_monsters
     eye_monstertime += frame_time
     plant_monstertime += frame_time
     power_monstertime += frame_time
@@ -87,6 +102,7 @@ def new_collison_check(a,b):
 
 # soldier 와 monster 의 충돌 처리
 def collision_soldier_monster():
+    global soldier, eye_monsters, plant_monsters, power_monsters, swage_monsters
     all_monsters = eye_monsters + plant_monsters + power_monsters + swage_monsters
     for monster in all_monsters:
         if collision_check(soldier, monster) or new_collison_check(soldier, monster):
@@ -105,6 +121,8 @@ def collision_soldier_monster():
 
 # attack 과 monster 의 충돌 처리
 def collision_attack_monster():
+    global eye_monsters, plant_monsters, power_monsters, swage_monsters, missile_attacks, basic_attacks,\
+           special_attack_effects, bomb_attacks
     all_monsters = eye_monsters + plant_monsters + power_monsters + swage_monsters
     # basic_attack 과 monster 의 충돌 처리
     for new_attack in basic_attacks:
@@ -134,15 +152,16 @@ def collision_attack_monster():
     for new_bomb_attack in bomb_attacks:
         for monster in all_monsters:
             if collision_check(new_bomb_attack, monster):
-                bomb_attacks.remove(new_bomb_attack)
                 new_special_attack_effect = Special_attack_effect()
                 new_special_attack_effect.x, new_special_attack_effect.y = new_bomb_attack.x, new_bomb_attack.y
+                bomb_attacks.remove(new_bomb_attack)
                 special_attack_effects.append(new_special_attack_effect)
 
 
 # 모든 몬스터 update, 몬스터가 죽으면 deleted 이펙트 그 좌표에 추가
 def update_all_monster(frame_time):
-    global Score
+    global Score, eye_monsters, plant_monsters, power_monsters, swage_monsters, \
+           deleted_ems, deleted_pms, deleted_plms, deleted_sms
     for new_eye_monster in eye_monsters:
         new_eye_monster.update(frame_time)
         if new_eye_monster.hp <= 0:
@@ -179,6 +198,7 @@ def update_all_monster(frame_time):
 
 # monster 들의 삭제 이펙트 업데이트
 def deleted_effect_update(frame_time):
+    global deleted_ems, deleted_pms, deleted_plms, deleted_sms
     for deleted_em in deleted_ems:
         deleted_em.update(frame_time)
         if deleted_em.frame >= 3:
@@ -199,6 +219,7 @@ def deleted_effect_update(frame_time):
 
 # 모든 공격과 이펙트 update
 def update_all_attack(frame_time):
+    global basic_attacks, missile_attacks, bomb_attacks, attack_effects, attack_effects2, special_attacks, special_attack_effects
     for new_attack in basic_attacks:
         new_attack.update(frame_time)
         if new_attack.x > 800 or new_attack.x < 0:
@@ -249,7 +270,9 @@ def make_items(frame_time):
         bomb_item_time = 0
 
 
+# all item update
 def update_all_items(frame_time):
+    global soldier, special_attack_items, bomb_items
     for item in special_attack_items:
         item.update(frame_time)
         if collision_check(item, soldier):
@@ -264,6 +287,8 @@ def update_all_items(frame_time):
 
 # 모든 객체 draw
 def draw_all():
+    global space, soldier, eye_monsters, plant_monsters, power_monsters, attack_effects, \
+    deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, attack_effects2, special_attack_effects, ui
     all_attacks = basic_attacks + missile_attacks + attack_effects + attack_effects2 + \
                   special_attacks + special_attack_effects + bomb_attacks
     all_deleted_effects = deleted_ems + deleted_pms + deleted_plms + deleted_sms

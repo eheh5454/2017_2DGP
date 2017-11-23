@@ -15,7 +15,7 @@ class Space_to_start():
         self.total_frames = 0
         self.frame = 0
         self.total_frames = 0
-        self.image = load_image('space_to_start3.png')
+        self.image = load_image('space_to_start.png')
 
     def update(self, frame_time):
         self.total_frames += self.ACTION_PER_TIME * self.FRAMES_PER_ACTION * frame_time
