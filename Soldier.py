@@ -7,7 +7,6 @@ missile_attacks = []
 special_attacks = []
 bomb_attacks = []
 
-
 special_attack_text = '{ \
     "attack1" : {"x":50, "y":550},"attack2" : {"x":150, "y":550},"attack3" : {"x":250, "y":550},"attack4" : {"x":350, "y":550},\
     "attack5" : {"x":450, "y":550},"attack6" : {"x":550, "y":550},"attack7" : {"x":650, "y":550},"attack8" : {"x":750, "y":550},\
@@ -85,9 +84,9 @@ class Soldier:
     def handle_events(self, event):
         global RIGHT, LEFT, UP, DOWN, bomb_count, special_attack_count
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_RIGHT):
-                self.RIGHT = True
+            self.RIGHT = True
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_LEFT):
-                self.LEFT = True
+            self.LEFT = True
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_UP):
             self.UP = True
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_DOWN):
@@ -165,15 +164,10 @@ class Soldier:
 
     # 위쪽 충돌박스
     def get_bb(self):
-        return self.x - 15, self.y - 40, self.x + 15, self.y + 40
-
-    # 아래쪽 충돌박스
-    def get_bb2(self):
-        return self.x - 20, self.y - 20, self.x + 20, self.y + 20
+        return self.x - 20, self.y - 40, self.x + 20, self.y + 40
 
     def draw_bb(self):
         draw_rectangle(*self.get_bb())
-        draw_rectangle(*self.get_bb2())
 
 
 class Basic_attack:

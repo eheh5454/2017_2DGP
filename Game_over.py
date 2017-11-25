@@ -1,10 +1,12 @@
 from pico2d import *
 import game_framework
+import Stage1
 
 
 image = None
 space = None
 font = None
+
 
 def enter():
     global image, space, font
@@ -25,7 +27,7 @@ def update():
 
 
 def draw():
-    global image, space
+    global image, space, Score
     clear_canvas()
     space.draw(400, 300)
     image.draw(400, 300)

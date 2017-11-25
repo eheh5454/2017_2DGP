@@ -27,6 +27,7 @@ deleted_pms = None
 deleted_plms = None
 deleted_sms = None
 
+
 # 맵크기 = 800X600픽셀, 1600cm x 1200cm, 16m x 12m
 class Space:
     def __init__(self):
@@ -87,25 +88,12 @@ def collision_check(a, b):
     return True
 
 
-# soldier 전용 추가 충돌체크 함수
-def new_collison_check(a,b):
-    left_a, bottom_a, right_a, top_a = a.get_bb2()
-    left_b, bottom_b, right_b, top_b = b.get_bb()
-
-    if left_a > right_b: return False
-    if right_a < left_b: return False
-    if top_a < bottom_b: return False
-    if bottom_a > top_b: return False
-
-    return True
-
-
 # soldier 와 monster 의 충돌 처리
 def collision_soldier_monster():
     global soldier, eye_monsters, plant_monsters, power_monsters, swage_monsters
     all_monsters = eye_monsters + plant_monsters + power_monsters + swage_monsters
     for monster in all_monsters:
-        if collision_check(soldier, monster) or new_collison_check(soldier, monster):
+        if collision_check(soldier, monster):
             # DAMAGED 상황일 때는 제외하고 충돌 처리, 충돌이 발생하면 state 를 DAMAGED 로 전환하고 frame 초기화
             if soldier.state in (soldier.RIGHT_RUN, soldier.RIGHT_ATTACK, soldier.RIGHT_THROW_BOMB):
                 soldier.state = soldier.RIGHT_DAMAGED
@@ -307,6 +295,14 @@ def draw_all():
     ui.draw()
 
 
+def draw_scene():
+    global soldier, eye_monsters, plant_monsters, power_monsters, swage_monsters
+    all_monsters = eye_monsters + plant_monsters + power_monsters + swage_monsters
+    soldier.draw()
+    for monster in all_monsters:
+        monster.draw()
+
+
 class UI():
     def __init__(self):
         self.font = load_font('ENCR10B.TTF', 30)
@@ -338,11 +334,10 @@ def enter():
     deleted_sms = []
 
 
-
 def exit():
     global space, soldier, eye_monsters, basic_attacks, plant_monsters, power_monsters, attack_effects, \
         deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, missile_attacks, attack_effects2, \
-        special_attacks, special_attack_effects, bomb_attacks, ui, special_attack_items
+        special_attacks, special_attack_effects, bomb_attacks, ui, special_attack_items, bomb_items
     del space
     del soldier
     del eye_monsters
@@ -362,6 +357,7 @@ def exit():
     del bomb_attacks
     del ui
     del special_attack_items
+    del bomb_items
 
 
 def pause():
