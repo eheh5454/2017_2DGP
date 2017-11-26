@@ -6,6 +6,7 @@ plant_monstertime = 0
 power_monstertime = 0
 swage_monstertime = 0
 
+
 # eye_monster의 크기 = 70x70 픽셀, 140cm x 140cm
 class Eye_monster:
     PIXEL_PER_METER = (10.0 / 0.2)
@@ -81,7 +82,6 @@ class Plant_monster:
         self.xrunspeed = -self.RUN_SPEED_PPS
         self.yrunspeed = random.choice(vector) * self.RUN_SPEED_PPS
         self.power = 10
-
 
     def update(self, frame_time):
         self.total_frames += self.FRAMES_PER_ACTION * self.ACTION_PER_TIME * frame_time
@@ -206,6 +206,7 @@ class Swage_monster:
 
     def draw_bb(self):
         draw_rectangle(*self.get_bb())
+
 
 class Deleted_em:
     TIME_PER_ACTION = 1.0
