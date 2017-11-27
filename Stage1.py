@@ -16,7 +16,7 @@ space = None
 soldier = None
 ui = None
 attack_effects = None
-attack_effects2 = None
+missile_attack_effects = None
 special_attack_effects = None
 eye_monsters = None
 plant_monsters = None
@@ -126,9 +126,9 @@ def collision_attack_monster():
     for new_attack in missile_attacks:
         for monster in all_monsters:
             if collision_check(new_attack, monster):
-                new_attack_effect = Attack_effect2()
+                new_attack_effect = Missile_attack_effect()
                 new_attack_effect.x, new_attack_effect.y = new_attack.x , new_attack.y
-                attack_effects2.append(new_attack_effect)
+                missile_attack_effects.append(new_attack_effect)
                 if new_attack in missile_attacks:
                    missile_attacks.remove(new_attack)
                 monster.hp -= 10
@@ -207,7 +207,7 @@ def deleted_effect_update(frame_time):
 
 # 모든 공격과 이펙트 update
 def update_all_attack(frame_time):
-    global basic_attacks, missile_attacks, bomb_attacks, attack_effects, attack_effects2, special_attacks, special_attack_effects
+    global basic_attacks, missile_attacks, bomb_attacks, attack_effects,    missile_attack_effects, special_attacks, special_attack_effects
     for new_attack in basic_attacks:
         new_attack.update(frame_time)
         if new_attack.x > 800 or new_attack.x < 0:
@@ -227,10 +227,10 @@ def update_all_attack(frame_time):
         attack_effect.update(frame_time)
         if attack_effect.frame == 5:
             attack_effects.remove(attack_effect)
-    for attack_effect in attack_effects2:
+    for attack_effect in    missile_attack_effects:
         attack_effect.update(frame_time)
         if attack_effect.frame == 5:
-            attack_effects2.remove(attack_effect)
+            missile_attack_effects.remove(attack_effect)
     for new_attack in special_attacks:
         new_attack.update(frame_time)
         if new_attack.frame == 6:
@@ -276,8 +276,8 @@ def update_all_items(frame_time):
 # 모든 객체 draw
 def draw_all():
     global space, soldier, eye_monsters, plant_monsters, power_monsters, attack_effects, \
-    deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, attack_effects2, special_attack_effects, ui
-    all_attacks = basic_attacks + missile_attacks + attack_effects + attack_effects2 + \
+    deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms,    missile_attack_effects, special_attack_effects, ui
+    all_attacks = basic_attacks + missile_attacks + attack_effects +    missile_attack_effects + \
                   special_attacks + special_attack_effects + bomb_attacks
     all_deleted_effects = deleted_ems + deleted_pms + deleted_plms + deleted_sms
     all_items = special_attack_items + bomb_items
@@ -317,12 +317,12 @@ class UI():
 
 def enter():
     global space, soldier, eye_monsters, plant_monsters, power_monsters, attack_effects,\
-        deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, attack_effects2, special_attack_effects, ui
+        deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, missile_attack_effects, special_attack_effects, ui
     space = Space()
     soldier = Soldier()
     ui = UI()
     attack_effects = []
-    attack_effects2 = []
+    missile_attack_effects = []
     special_attack_effects = []
     eye_monsters = []
     plant_monsters = []
@@ -336,7 +336,7 @@ def enter():
 
 def exit():
     global space, soldier, eye_monsters, basic_attacks, plant_monsters, power_monsters, attack_effects, \
-        deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, missile_attacks, attack_effects2, \
+        deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, missile_attacks,missile_attack_effects, \
         special_attacks, special_attack_effects, bomb_attacks, ui, special_attack_items, bomb_items
     del space
     del soldier
@@ -345,7 +345,7 @@ def exit():
     del plant_monsters
     del power_monsters
     del attack_effects
-    del attack_effects2
+    del missile_attack_effects
     del missile_attacks
     del swage_monsters
     del deleted_ems

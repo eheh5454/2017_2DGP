@@ -272,7 +272,7 @@ class Attack_effect():
 
 
 # missile_attack 의 effect, 크기만 키웠다.
-class Attack_effect2():
+class Missile_attack_effect():
     TIME_PER_ACTION = 0.5
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 8
