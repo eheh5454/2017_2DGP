@@ -5,6 +5,8 @@ import Stage1
 
 image = None
 current_time = 0
+space_to_start = None
+
 
 class Space_to_start():
     TIME_PER_ACTION = 2
@@ -26,22 +28,22 @@ class Space_to_start():
 
 
 def enter():
-    global image, space
+    global image, space_to_start
     open_canvas()
     image = load_image('title.png')
-    space = Space_to_start()
+    space_to_start = Space_to_start()
 
 def exit():
-    global image, space
+    global image, space_to_start
     del image
-    del space
+    del space_to_start
     close_canvas()
 
 
 def update():
-    global current_time
+    global current_time, space_to_start
     frame_time = get_time() - current_time
-    space.update(frame_time)
+    space_to_start.update(frame_time)
     current_time += frame_time
     pass
 
@@ -50,7 +52,7 @@ def draw():
     global image
     clear_canvas()
     image.draw(400, 300)
-    space.draw()
+    space_to_start.draw()
     update_canvas()
 
 

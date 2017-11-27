@@ -30,8 +30,11 @@ deleted_sms = None
 
 # 맵크기 = 800X600픽셀, 1600cm x 1200cm, 16m x 12m
 class Space:
+    image = None
+
     def __init__(self):
-        self.image = load_image('Space.jpg')
+        if self.image is None:
+            self.image = load_image("Space.jpg")
 
     def draw(self):
         self.image.draw(400, 300)
@@ -109,28 +112,28 @@ def collision_soldier_monster():
 
 # attack 과 monster 의 충돌 처리
 def collision_attack_monster():
-    global eye_monsters, plant_monsters, power_monsters, swage_monsters, missile_attacks, basic_attacks,\
+    global eye_monsters, plant_monsters, power_monsters, swage_monsters, Missiles, Bullets,\
            special_attack_effects, bomb_attacks
     all_monsters = eye_monsters + plant_monsters + power_monsters + swage_monsters
     # basic_attack 과 monster 의 충돌 처리
-    for new_attack in basic_attacks:
+    for new_attack in Bullets:
         for monster in all_monsters:
             if collision_check(new_attack, monster):
                 new_attack_effect = Attack_effect()
                 new_attack_effect.x, new_attack_effect.y = new_attack.x, new_attack.y
                 attack_effects.append(new_attack_effect)
-                if new_attack in basic_attacks:
-                   basic_attacks.remove(new_attack)
+                if new_attack in Bullets:
+                   Bullets.remove(new_attack)
                 monster.hp -= 5
     # missile_attack 과 monster 의 충돌 처리
-    for new_attack in missile_attacks:
+    for new_attack in Missiles:
         for monster in all_monsters:
             if collision_check(new_attack, monster):
                 new_attack_effect = Missile_attack_effect()
                 new_attack_effect.x, new_attack_effect.y = new_attack.x , new_attack.y
                 missile_attack_effects.append(new_attack_effect)
-                if new_attack in missile_attacks:
-                   missile_attacks.remove(new_attack)
+                if new_attack in Missiles:
+                   Missiles.remove(new_attack)
                 monster.hp -= 10
     # special_attack 과 monster 의 충돌 처리
     for new_attack in special_attack_effects:
@@ -207,12 +210,12 @@ def deleted_effect_update(frame_time):
 
 # 모든 공격과 이펙트 update
 def update_all_attack(frame_time):
-    global basic_attacks, missile_attacks, bomb_attacks, attack_effects,    missile_attack_effects, special_attacks, special_attack_effects
-    for new_attack in basic_attacks:
+    global Bullets, Missiles, bomb_attacks, attack_effects,    missile_attack_effects, special_attacks, special_attack_effects
+    for new_attack in Bullets:
         new_attack.update(frame_time)
         if new_attack.x > 800 or new_attack.x < 0:
             del (new_attack)
-    for new_attack in missile_attacks:
+    for new_attack in Missiles:
         new_attack.update(frame_time)
         if new_attack.x > 800 or new_attack.x < 0:
             del (new_attack)
@@ -276,8 +279,8 @@ def update_all_items(frame_time):
 # 모든 객체 draw
 def draw_all():
     global space, soldier, eye_monsters, plant_monsters, power_monsters, attack_effects, \
-    deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms,    missile_attack_effects, special_attack_effects, ui
-    all_attacks = basic_attacks + missile_attacks + attack_effects +    missile_attack_effects + \
+    deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, missile_attack_effects, special_attack_effects, ui
+    all_attacks = Bullets + Missiles + attack_effects + missile_attack_effects + \
                   special_attacks + special_attack_effects + bomb_attacks
     all_deleted_effects = deleted_ems + deleted_pms + deleted_plms + deleted_sms
     all_items = special_attack_items + bomb_items
@@ -317,7 +320,8 @@ class UI():
 
 def enter():
     global space, soldier, eye_monsters, plant_monsters, power_monsters, attack_effects,\
-        deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, missile_attack_effects, special_attack_effects, ui
+        deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, missile_attack_effects, \
+        special_attack_effects, ui
     space = Space()
     soldier = Soldier()
     ui = UI()
@@ -335,18 +339,18 @@ def enter():
 
 
 def exit():
-    global space, soldier, eye_monsters, basic_attacks, plant_monsters, power_monsters, attack_effects, \
-        deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, missile_attacks,missile_attack_effects, \
+    global space, soldier, eye_monsters, Bullets, plant_monsters, power_monsters, attack_effects, \
+        deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, Missiles, missile_attack_effects, \
         special_attacks, special_attack_effects, bomb_attacks, ui, special_attack_items, bomb_items
     del space
     del soldier
     del eye_monsters
-    del basic_attacks
+    del Bullets
     del plant_monsters
     del power_monsters
     del attack_effects
     del missile_attack_effects
-    del missile_attacks
+    del Missiles
     del swage_monsters
     del deleted_ems
     del deleted_pms

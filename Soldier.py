@@ -2,8 +2,8 @@ from pico2d import *
 import json
 import Stage1
 
-basic_attacks = []
-missile_attacks = []
+Bullets = []
+Missiles = []
 special_attacks = []
 bomb_attacks = []
 
@@ -102,18 +102,18 @@ class Soldier:
         # a키를 누르면 공격
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_a):
             if Stage1.Score >= 100:
-                new_attack = Missile_attack()
+                new_attack = Missile()
             else:
-                new_attack = Basic_attack()
+                new_attack = Bullet()
             # RIGHT_RUN state 이면 오른쪽 발사
             if self.state in (self.RIGHT_RUN, self.RIGHT_ATTACK):
                new_attack.x, new_attack.y = self.x + 10, self. y
                self.state = self.RIGHT_ATTACK
                self.frame = 0
-               if new_attack == Missile_attack():
-                   missile_attacks.append(new_attack)
+               if new_attack == Missile():
+                   Missiles.append(new_attack)
                else:
-                   basic_attacks.append(new_attack)
+                   Bullets.append(new_attack)
             # LEFT_RUN state 이면 왼쪽 발사
             elif self.state in (self.LEFT_RUN, self.LEFT_ATTACK):
                 new_attack.x, new_attack.y = self.x - 10, self.y
@@ -121,10 +121,10 @@ class Soldier:
                 new_attack.frame = 1
                 self.state = self.LEFT_ATTACK
                 self.frame = 0
-                if new_attack == Missile_attack():
-                    missile_attacks.append(new_attack)
+                if new_attack == Missile():
+                    Missiles.append(new_attack)
                 else:
-                    basic_attacks.append(new_attack)
+                    Bullets.append(new_attack)
         # s키를 누르면 수류탄 투척
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_s):
             if self.bomb_count <= 0:
@@ -170,7 +170,7 @@ class Soldier:
         draw_rectangle(*self.get_bb())
 
 
-class Basic_attack:
+class Bullet:
     PIXEL_PER_METER = (10.0 / 0.2)
     RUN_SPEED_KMPH = 50.0
     RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
@@ -183,8 +183,8 @@ class Basic_attack:
         self.dir = 0
         self.frame = 0
         self.x, self.y = 0, 0
-        if Basic_attack.image is None:
-            Basic_attack.image = load_image("basic_attack.png")
+        if Bullet.image is None:
+            Bullet.image = load_image("basic_attack.png")
 
     def update(self, frame_time):
         self.runspeed = self.RUN_SPEED_PPS * frame_time
@@ -209,7 +209,7 @@ class Basic_attack:
 
 
 # upgrade된 attack
-class Missile_attack:
+class Missile:
     PIXEL_PER_METER = (10.0 / 0.2)
     RUN_SPEED_KMPH = 60.0
     RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
@@ -221,8 +221,8 @@ class Missile_attack:
     def __init__(self):
         self.dir = 0
         self.frame = 0
-        if Missile_attack.image is None:
-            Missile_attack.image = load_image("missile_attack.png")
+        if Missile.image is None:
+            Missile.image = load_image("missile_attack.png")
         self.x, self.y = 0, 0
 
     def update(self, frame_time):

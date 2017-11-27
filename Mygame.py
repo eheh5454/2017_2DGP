@@ -2,6 +2,7 @@ from pico2d import *
 
 import Stage1
 import Title
+import Start
 import game_framework
 
 #open_canvas()
