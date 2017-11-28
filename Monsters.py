@@ -1,14 +1,14 @@
 from pico2d import *
 import random
 
-eye_monstertime = 0
-plant_monstertime = 0
-power_monstertime = 0
-swage_monstertime = 0
+eyemonster_time = 0
+plantmonster_time = 0
+powermonster_time = 0
+swagemonster_time = 0
 
 
 # eye_monster의 크기 = 70x70 픽셀, 140cm x 140cm
-class Eye_monster:
+class Eyemonster:
     PIXEL_PER_METER = (10.0 / 0.2)
     RUN_SPEED_KMPH = 20.0
     RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
@@ -25,12 +25,11 @@ class Eye_monster:
         self.x, self.y = random.randint(0, 100), random.randint(0, 100)
         self.frame = 0
         self.total_frames = 0
-        if Eye_monster.image is None:
-           Eye_monster.image = load_image('Eye_monster.png')
+        if Eyemonster.image is None:
+           Eyemonster.image = load_image('Eye_monster.png')
         self.hp = 20
-        vector = [-1, 1]
         self.xrunspeed = self.RUN_SPEED_PPS
-        self.yrunspeed = random.choice(vector) * self.RUN_SPEED_PPS
+        self.yrunspeed = random.choice([-1, 1]) * self.RUN_SPEED_PPS
         self.power = 5
 
     def update(self, frame_time):
@@ -58,7 +57,7 @@ class Eye_monster:
 
 
 # plant_monster의 크기 = 130 x 150픽셀, 260cm x 300cm
-class Plant_monster:
+class Plantmonster:
     PIXEL_PER_METER = (10.0 / 0.2)
     RUN_SPEED_KMPH = 10.0
     RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
@@ -75,12 +74,11 @@ class Plant_monster:
         self.x, self.y = random.randint(700, 800), random.randint(0, 100)
         self.frame = 0
         self.total_frames = 0
-        if Plant_monster.image is None:
+        if Plantmonster.image is None:
             self.image = load_image('Plant_monster.png')
         self.hp = 40
-        vector = [-1, 1]
         self.xrunspeed = -self.RUN_SPEED_PPS
-        self.yrunspeed = random.choice(vector) * self.RUN_SPEED_PPS
+        self.yrunspeed = random.choice([-1, 1]) * self.RUN_SPEED_PPS
         self.power = 10
 
     def update(self, frame_time):
@@ -108,7 +106,7 @@ class Plant_monster:
 
 
 # power_monster의 크기 = 80 x 100 픽셀, 160cm x 200cm
-class Power_monster:
+class Powermonster:
     PIXEL_PER_METER = (10.0 / 0.2)
     RUN_SPEED_KMPH = 15.0
     RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
@@ -125,12 +123,11 @@ class Power_monster:
         self.x, self.y = random.randint(0, 100), random.randint(500, 600)
         self.frame = 0
         self.total_frames = 0
-        if Power_monster.image is None:
-           Power_monster.image = load_image('Power_monster.png')
+        if Powermonster.image is None:
+           Powermonster.image = load_image('Power_monster.png')
         self.hp = 30
-        vector = [-1, 1]
         self.xrunspeed = self.RUN_SPEED_PPS
-        self.yrunspeed = random.choice(vector) * self.RUN_SPEED_PPS
+        self.yrunspeed = random.choice([-1, 1]) * self.RUN_SPEED_PPS
         self.power = 10
 
     def update(self, frame_time):
@@ -158,7 +155,7 @@ class Power_monster:
 
 
 # 80 x 90 픽셀, 160cm x 180cm
-class Swage_monster:
+class Swagemonster:
     PIXEL_PER_METER = (10.0 / 0.2)
     RUN_SPEED_KMPH = 15.0
     RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
@@ -172,14 +169,13 @@ class Swage_monster:
     image = None
 
     def __init__(self):
-        vector = [-1, 1]
         self.x, self.y = random.randint(700, 800), random.randint(500, 600)
         self.frame = 0
         self.total_frames = 0
-        if Swage_monster.image is None:
+        if Swagemonster.image is None:
             self.image = load_image('Swage_monster.png')
         self.hp = 30
-        self.xrunspeed = -self.RUN_SPEED_PPS
+        self.xrunspeed = random.choice([-1, 1]) * self.RUN_SPEED_PPS
         self.yrunspeed = -self.RUN_SPEED_PPS
         self.power = 10
 
@@ -208,7 +204,7 @@ class Swage_monster:
         draw_rectangle(*self.get_bb())
 
 
-class Deleted_em:
+class Deleted_Eyemonster:
     TIME_PER_ACTION = 1.0
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 4
@@ -227,7 +223,7 @@ class Deleted_em:
         self.image.clip_draw(self.frame * 70, 0, 70, 70, self.x, self.y)
 
 
-class Deleted_pm:
+class Deleted_Powermonster:
     TIME_PER_ACTION = 1.0
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 4
@@ -246,7 +242,7 @@ class Deleted_pm:
         self.image.clip_draw(self.frame * 80, 0, 80, 100, self.x, self.y)
 
 
-class Deleted_plm:
+class Deleted_Plantmonster:
     TIME_PER_ACTION = 1.0
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 4
@@ -265,7 +261,7 @@ class Deleted_plm:
         self.image.clip_draw(self.frame * 130, 0, 130, 130, self.x, self.y)
 
 
-class Deleted_sm:
+class Deleted_Swagemonster:
     TIME_PER_ACTION = 0.5
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 4

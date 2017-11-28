@@ -2,8 +2,8 @@ from pico2d import *
 import json
 import Stage1
 
-Bullets = []
-Missiles = []
+bullets = []
+missiles = []
 special_attacks = []
 bomb_attacks = []
 
@@ -111,9 +111,9 @@ class Soldier:
                self.state = self.RIGHT_ATTACK
                self.frame = 0
                if new_attack == Missile():
-                   Missiles.append(new_attack)
+                   missiles.append(new_attack)
                else:
-                   Bullets.append(new_attack)
+                   bullets.append(new_attack)
             # LEFT_RUN state 이면 왼쪽 발사
             elif self.state in (self.LEFT_RUN, self.LEFT_ATTACK):
                 new_attack.x, new_attack.y = self.x - 10, self.y
@@ -122,9 +122,9 @@ class Soldier:
                 self.state = self.LEFT_ATTACK
                 self.frame = 0
                 if new_attack == Missile():
-                    Missiles.append(new_attack)
+                    missiles.append(new_attack)
                 else:
-                    Bullets.append(new_attack)
+                    bullets.append(new_attack)
         # s키를 누르면 수류탄 투척
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_s):
             if self.bomb_count <= 0:

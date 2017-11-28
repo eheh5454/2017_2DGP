@@ -18,14 +18,14 @@ ui = None
 attack_effects = None
 missile_attack_effects = None
 special_attack_effects = None
-eye_monsters = None
-plant_monsters = None
-power_monsters = None
-swage_monsters = None
-deleted_ems = None
-deleted_pms = None
-deleted_plms = None
-deleted_sms = None
+eyemonsters = None
+plantmonsters = None
+powermonsters = None
+swagemonsters = None
+deleted_eyemonsters = None
+deleted_powermonsters = None
+deleted_plantmonsters = None
+deleted_swagemonsters = None
 
 
 # 맵크기 = 800X600픽셀, 1600cm x 1200cm, 16m x 12m
@@ -42,40 +42,40 @@ class Space:
 
 # 시간에 따라 monster 를 만들어주는 함수
 def make_all_monster(frame_time):
-    global eye_monstertime, plant_monstertime, power_monstertime, swage_monstertime, eye_monsters, power_monsters, \
-           plant_monsters, swage_monsters
-    eye_monstertime += frame_time
-    plant_monstertime += frame_time
-    power_monstertime += frame_time
-    swage_monstertime += frame_time
-    if eye_monstertime > 5:
+    global eyemonster_time, plantmonster_time, powermonster_time, swagemonster_time, eyemonsters, powermonsters, \
+           plantmonsters, swagemonsters
+    eyemonster_time += frame_time
+    plantmonster_time += frame_time
+    powermonster_time += frame_time
+    swagemonster_time += frame_time
+    if eyemonster_time > 5:
         if current_time > 30:
-            new_eye_monster = Eye_monster()
-            eye_monsters.append(new_eye_monster)
-        new_eye_monster = Eye_monster()
-        eye_monsters.append(new_eye_monster)
-        eye_monstertime = 0
-    if plant_monstertime > 10:
+            new_eye_monster = Eyemonster()
+            eyemonsters.append(new_eye_monster)
+        new_eye_monster = Eyemonster()
+        eyemonsters.append(new_eye_monster)
+        eyemonster_time = 0
+    if plantmonster_time > 10:
         if current_time > 60:
-            new_plant_monster = Plant_monster()
-            eye_monsters.append(new_plant_monster)
-        new_plant_monster = Plant_monster()
-        plant_monsters.append(new_plant_monster)
-        plant_monstertime = 0
-    if power_monstertime > 7:
+            new_plant_monster = Plantmonster()
+            eyemonsters.append(new_plant_monster)
+        new_plant_monster = Plantmonster()
+        plantmonsters.append(new_plant_monster)
+        plantmonster_time = 0
+    if powermonster_time > 7:
         if current_time > 40:
-            new_power_monster = Power_monster()
-            power_monsters.append(new_power_monster)
-        new_power_monster = Power_monster()
-        power_monsters.append(new_power_monster)
-        power_monstertime = 0
-    if swage_monstertime > 7:
+            new_power_monster = Powermonster()
+            powermonsters.append(new_power_monster)
+        new_power_monster = Powermonster()
+        powermonsters.append(new_power_monster)
+        powermonster_time = 0
+    if swagemonster_time > 7:
         if current_time > 50:
-            new_swage_monster = Swage_monster()
-            swage_monsters.append(new_swage_monster)
-        new_swage_monster = Swage_monster()
-        swage_monsters.append(new_swage_monster)
-        swage_monstertime = 0
+            new_swage_monster = Swagemonster()
+            swagemonsters.append(new_swage_monster)
+        new_swage_monster = Swagemonster()
+        swagemonsters.append(new_swage_monster)
+        swagemonster_time = 0
 
 
 # 기본 충돌 체크 함수
@@ -93,8 +93,8 @@ def collision_check(a, b):
 
 # soldier 와 monster 의 충돌 처리
 def collision_soldier_monster():
-    global soldier, eye_monsters, plant_monsters, power_monsters, swage_monsters
-    all_monsters = eye_monsters + plant_monsters + power_monsters + swage_monsters
+    global soldier, eyemonsters, plantmonsters, powermonsters, swagemonsters
+    all_monsters = eyemonsters + plantmonsters + powermonsters + swagemonsters
     for monster in all_monsters:
         if collision_check(soldier, monster):
             # DAMAGED 상황일 때는 제외하고 충돌 처리, 충돌이 발생하면 state 를 DAMAGED 로 전환하고 frame 초기화
@@ -112,28 +112,28 @@ def collision_soldier_monster():
 
 # attack 과 monster 의 충돌 처리
 def collision_attack_monster():
-    global eye_monsters, plant_monsters, power_monsters, swage_monsters, Missiles, Bullets,\
+    global eyemonsters, plantmonsters, powermonsters, swagemonsters, missiles, bullets,\
            special_attack_effects, bomb_attacks
-    all_monsters = eye_monsters + plant_monsters + power_monsters + swage_monsters
+    all_monsters = eyemonsters + plantmonsters + powermonsters + swagemonsters
     # basic_attack 과 monster 의 충돌 처리
-    for new_attack in Bullets:
+    for new_attack in bullets:
         for monster in all_monsters:
             if collision_check(new_attack, monster):
                 new_attack_effect = Attack_effect()
                 new_attack_effect.x, new_attack_effect.y = new_attack.x, new_attack.y
                 attack_effects.append(new_attack_effect)
-                if new_attack in Bullets:
-                   Bullets.remove(new_attack)
+                if new_attack in bullets:
+                   bullets.remove(new_attack)
                 monster.hp -= 5
     # missile_attack 과 monster 의 충돌 처리
-    for new_attack in Missiles:
+    for new_attack in missiles:
         for monster in all_monsters:
             if collision_check(new_attack, monster):
                 new_attack_effect = Missile_attack_effect()
                 new_attack_effect.x, new_attack_effect.y = new_attack.x , new_attack.y
                 missile_attack_effects.append(new_attack_effect)
-                if new_attack in Missiles:
-                   Missiles.remove(new_attack)
+                if new_attack in missiles:
+                   missiles.remove(new_attack)
                 monster.hp -= 10
     # special_attack 과 monster 의 충돌 처리
     for new_attack in special_attack_effects:
@@ -151,71 +151,71 @@ def collision_attack_monster():
 
 # 모든 몬스터 update, 몬스터가 죽으면 deleted 이펙트 그 좌표에 추가
 def update_all_monster(frame_time):
-    global Score, eye_monsters, plant_monsters, power_monsters, swage_monsters, \
-           deleted_ems, deleted_pms, deleted_plms, deleted_sms
-    for new_eye_monster in eye_monsters:
+    global Score, eyemonsters, plantmonsters, powermonsters, swagemonsters, \
+           deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, deleted_swagemonsters
+    for new_eye_monster in eyemonsters:
         new_eye_monster.update(frame_time)
         if new_eye_monster.hp <= 0:
-            new_deleted_em = Deleted_em()
+            new_deleted_em = Deleted_Eyemonster()
             new_deleted_em.x, new_deleted_em.y = new_eye_monster.x, new_eye_monster.y
-            deleted_ems.append(new_deleted_em)
-            eye_monsters.remove(new_eye_monster)
+            deleted_eyemonsters.append(new_deleted_em)
+            eyemonsters.remove(new_eye_monster)
             Score += 5
-    for new_plant_monster in plant_monsters:
+    for new_plant_monster in plantmonsters:
         new_plant_monster.update(frame_time)
         if new_plant_monster.hp <= 0:
-            new_deleted_plm = Deleted_plm()
+            new_deleted_plm = Deleted_Plantmonster()
             new_deleted_plm.x, new_deleted_plm.y = new_plant_monster.x, new_plant_monster.y
-            deleted_plms.append(new_deleted_plm)
-            plant_monsters.remove(new_plant_monster)
+            deleted_plantmonsters.append(new_deleted_plm)
+            plantmonsters.remove(new_plant_monster)
             Score += 10
-    for new_power_monster in power_monsters:
+    for new_power_monster in powermonsters:
         new_power_monster.update(frame_time)
         if new_power_monster.hp <= 0:
-            new_deleted_pm = Deleted_pm()
+            new_deleted_pm = Deleted_Powermonster()
             new_deleted_pm.x, new_deleted_pm.y = new_power_monster.x, new_power_monster.y
-            deleted_pms.append(new_deleted_pm)
-            power_monsters.remove(new_power_monster)
+            deleted_powermonsters.append(new_deleted_pm)
+            powermonsters.remove(new_power_monster)
             Score += 7
-    for new_swage_monster in swage_monsters:
+    for new_swage_monster in swagemonsters:
         new_swage_monster.update(frame_time)
         if new_swage_monster.hp <= 0:
-            new_deleted_sm = Deleted_sm()
+            new_deleted_sm = Deleted_Swagemonster()
             new_deleted_sm.x, new_deleted_sm.y = new_swage_monster.x, new_swage_monster.y
-            deleted_sms.append(new_deleted_sm)
-            swage_monsters.remove(new_swage_monster)
+            deleted_swagemonsters.append(new_deleted_sm)
+            swagemonsters.remove(new_swage_monster)
             Score += 6
 
 
 # monster 들의 삭제 이펙트 업데이트
 def deleted_effect_update(frame_time):
-    global deleted_ems, deleted_pms, deleted_plms, deleted_sms
-    for deleted_em in deleted_ems:
+    global deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, deleted_swagemonsters
+    for deleted_em in deleted_eyemonsters:
         deleted_em.update(frame_time)
         if deleted_em.frame >= 3:
-            deleted_ems.remove(deleted_em)
-    for deleted_pm in deleted_pms:
+            deleted_eyemonsters.remove(deleted_em)
+    for deleted_pm in deleted_powermonsters:
         deleted_pm.update(frame_time)
         if deleted_pm.frame >= 3:
-            deleted_pms.remove(deleted_pm)
-    for deleted_plm in deleted_plms:
+            deleted_powermonsters.remove(deleted_pm)
+    for deleted_plm in deleted_plantmonsters:
         deleted_plm.update(frame_time)
         if deleted_plm.frame >= 3:
-            deleted_plms.remove(deleted_plm)
-    for deleted_sm in deleted_sms:
+            deleted_plantmonsters.remove(deleted_plm)
+    for deleted_sm in deleted_swagemonsters:
         deleted_sm.update(frame_time)
         if deleted_sm.frame >= 2:
-            deleted_sms.remove(deleted_sm)
+            deleted_swagemonsters.remove(deleted_sm)
 
 
 # 모든 공격과 이펙트 update
 def update_all_attack(frame_time):
-    global Bullets, Missiles, bomb_attacks, attack_effects,    missile_attack_effects, special_attacks, special_attack_effects
-    for new_attack in Bullets:
+    global bullets, missiles, bomb_attacks, attack_effects, missile_attack_effects, special_attacks, special_attack_effects
+    for new_attack in bullets:
         new_attack.update(frame_time)
         if new_attack.x > 800 or new_attack.x < 0:
             del (new_attack)
-    for new_attack in Missiles:
+    for new_attack in missiles:
         new_attack.update(frame_time)
         if new_attack.x > 800 or new_attack.x < 0:
             del (new_attack)
@@ -230,7 +230,7 @@ def update_all_attack(frame_time):
         attack_effect.update(frame_time)
         if attack_effect.frame == 5:
             attack_effects.remove(attack_effect)
-    for attack_effect in    missile_attack_effects:
+    for attack_effect in missile_attack_effects:
         attack_effect.update(frame_time)
         if attack_effect.frame == 5:
             missile_attack_effects.remove(attack_effect)
@@ -278,13 +278,13 @@ def update_all_items(frame_time):
 
 # 모든 객체 draw
 def draw_all():
-    global space, soldier, eye_monsters, plant_monsters, power_monsters, attack_effects, \
-    deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, missile_attack_effects, special_attack_effects, ui
-    all_attacks = Bullets + Missiles + attack_effects + missile_attack_effects + \
+    global space, soldier, eyemonsters, plantmonsters, powermonsters, attack_effects, \
+    deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, missile_attack_effects, special_attack_effects, ui
+    all_attacks = bullets + missiles + attack_effects + missile_attack_effects + \
                   special_attacks + special_attack_effects + bomb_attacks
-    all_deleted_effects = deleted_ems + deleted_pms + deleted_plms + deleted_sms
+    all_deleted_effects = deleted_eyemonsters + deleted_powermonsters + deleted_plantmonsters + deleted_swagemonsters
     all_items = special_attack_items + bomb_items
-    all_monsters = eye_monsters + plant_monsters + power_monsters + swage_monsters
+    all_monsters = eyemonsters + plantmonsters + powermonsters + swagemonsters
     space.draw()
     soldier.draw()
     for attack in all_attacks:
@@ -299,8 +299,8 @@ def draw_all():
 
 
 def draw_scene():
-    global soldier, eye_monsters, plant_monsters, power_monsters, swage_monsters
-    all_monsters = eye_monsters + plant_monsters + power_monsters + swage_monsters
+    global soldier, eyemonsters, plantmonsters, powermonsters, swagemonsters
+    all_monsters = eyemonsters + plantmonsters + powermonsters + swagemonsters
     soldier.draw()
     for monster in all_monsters:
         monster.draw()
@@ -319,8 +319,8 @@ class UI():
 
 
 def enter():
-    global space, soldier, eye_monsters, plant_monsters, power_monsters, attack_effects,\
-        deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, missile_attack_effects, \
+    global space, soldier, eyemonsters, plantmonsters, powermonsters, attack_effects,\
+        deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, missile_attack_effects, \
         special_attack_effects, ui
     space = Space()
     soldier = Soldier()
@@ -328,34 +328,34 @@ def enter():
     attack_effects = []
     missile_attack_effects = []
     special_attack_effects = []
-    eye_monsters = []
-    plant_monsters = []
-    power_monsters = []
-    swage_monsters = []
-    deleted_ems = []
-    deleted_pms = []
-    deleted_plms = []
-    deleted_sms = []
+    eyemonsters = []
+    plantmonsters = []
+    powermonsters = []
+    swagemonsters = []
+    deleted_eyemonsters = []
+    deleted_powermonsters = []
+    deleted_plantmonsters = []
+    deleted_swagemonsters = []
 
 
 def exit():
-    global space, soldier, eye_monsters, Bullets, plant_monsters, power_monsters, attack_effects, \
-        deleted_ems, deleted_pms, deleted_plms, swage_monsters, deleted_sms, Missiles, missile_attack_effects, \
+    global space, soldier, eyemonsters, bullets, plantmonsters, powermonsters, attack_effects, \
+        deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, missiles, missile_attack_effects, \
         special_attacks, special_attack_effects, bomb_attacks, ui, special_attack_items, bomb_items
     del space
     del soldier
-    del eye_monsters
-    del Bullets
-    del plant_monsters
-    del power_monsters
+    del eyemonsters
+    del bullets
+    del plantmonsters
+    del powermonsters
     del attack_effects
     del missile_attack_effects
-    del Missiles
-    del swage_monsters
-    del deleted_ems
-    del deleted_pms
-    del deleted_plms
-    del deleted_sms
+    del missiles
+    del swagemonsters
+    del deleted_eyemonsters
+    del deleted_powermonsters
+    del deleted_plantmonsters
+    del deleted_swagemonsters
     del special_attacks
     del special_attack_effects
     del bomb_attacks
