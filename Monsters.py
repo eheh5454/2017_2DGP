@@ -179,7 +179,6 @@ class Swagemonster:
         self.yrunspeed = -self.RUN_SPEED_PPS
         self.power = 10
 
-
     def update(self, frame_time):
         self.total_frames += self.FRAMES_PER_ACTION * self.ACTION_PER_TIME * frame_time
         self.frame = int(self.total_frames) % 4

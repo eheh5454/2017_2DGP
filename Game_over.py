@@ -22,11 +22,11 @@ def exit():
     del font
 
 
-def update():
+def update(frame_time):
     pass
 
 
-def draw():
+def draw(frame_time):
     global image, space, Score
     clear_canvas()
     space.draw(400, 300)
@@ -35,7 +35,7 @@ def draw():
     update_canvas()
 
 
-def handle_events():
+def handle_events(frame_time):
     events = get_events()
     for event in events:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):

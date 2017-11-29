@@ -248,7 +248,7 @@ class Missile:
 
 
 # basic_attack effect
-class Attack_effect():
+class Bullet_effect():
     TIME_PER_ACTION = 0.5
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 8
@@ -260,7 +260,7 @@ class Attack_effect():
         self.y = 0
         self.frame = 0
         self.total_frames = 0
-        if Attack_effect.image is None:
+        if Bullet_effect.image is None:
             self.image = load_image("attack_effect.png")
 
     def update(self, frame_time):
@@ -272,7 +272,7 @@ class Attack_effect():
 
 
 # missile_attack 의 effect, 크기만 키웠다.
-class Missile_attack_effect():
+class Missile_effect():
     TIME_PER_ACTION = 0.5
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 8
@@ -284,7 +284,7 @@ class Missile_attack_effect():
         self.y = 0
         self.frame = 0
         self.total_frames = 0
-        if Attack_effect.image is None:
+        if Bullet_effect.image is None:
             self.image = load_image("attack_effect2.png")
 
     def update(self, frame_time):

@@ -15,8 +15,8 @@ Score = 0
 space = None
 soldier = None
 ui = None
-attack_effects = None
-missile_attack_effects = None
+bullet_effects = None
+missile_effects = None
 special_attack_effects = None
 eyemonsters = None
 plantmonsters = None
@@ -119,9 +119,9 @@ def collision_attack_monster():
     for new_attack in bullets:
         for monster in all_monsters:
             if collision_check(new_attack, monster):
-                new_attack_effect = Attack_effect()
+                new_attack_effect = Bullet_effect()
                 new_attack_effect.x, new_attack_effect.y = new_attack.x, new_attack.y
-                attack_effects.append(new_attack_effect)
+                bullet_effects.append(new_attack_effect)
                 if new_attack in bullets:
                    bullets.remove(new_attack)
                 monster.hp -= 5
@@ -129,9 +129,9 @@ def collision_attack_monster():
     for new_attack in missiles:
         for monster in all_monsters:
             if collision_check(new_attack, monster):
-                new_attack_effect = Missile_attack_effect()
+                new_attack_effect = Missile_effect()
                 new_attack_effect.x, new_attack_effect.y = new_attack.x , new_attack.y
-                missile_attack_effects.append(new_attack_effect)
+                missile_effects.append(new_attack_effect)
                 if new_attack in missiles:
                    missiles.remove(new_attack)
                 monster.hp -= 10
@@ -210,7 +210,7 @@ def deleted_effect_update(frame_time):
 
 # 모든 공격과 이펙트 update
 def update_all_attack(frame_time):
-    global bullets, missiles, bomb_attacks, attack_effects, missile_attack_effects, special_attacks, special_attack_effects
+    global bullets, missiles, bomb_attacks, bullet_effects, missile_effects, special_attacks, special_attack_effects
     for new_attack in bullets:
         new_attack.update(frame_time)
         if new_attack.x > 800 or new_attack.x < 0:
@@ -226,14 +226,14 @@ def update_all_attack(frame_time):
             new_special_attack_effect = Special_attack_effect()
             new_special_attack_effect.x, new_special_attack_effect.y = new_bomb_attack.x, new_bomb_attack.y
             special_attack_effects.append(new_special_attack_effect)
-    for attack_effect in attack_effects:
+    for attack_effect in bullet_effects:
         attack_effect.update(frame_time)
         if attack_effect.frame == 5:
-            attack_effects.remove(attack_effect)
-    for attack_effect in missile_attack_effects:
+            bullet_effects.remove(attack_effect)
+    for attack_effect in missile_effects:
         attack_effect.update(frame_time)
         if attack_effect.frame == 5:
-            missile_attack_effects.remove(attack_effect)
+            missile_effects.remove(attack_effect)
     for new_attack in special_attacks:
         new_attack.update(frame_time)
         if new_attack.frame == 6:
@@ -278,9 +278,9 @@ def update_all_items(frame_time):
 
 # 모든 객체 draw
 def draw_all():
-    global space, soldier, eyemonsters, plantmonsters, powermonsters, attack_effects, \
-    deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, missile_attack_effects, special_attack_effects, ui
-    all_attacks = bullets + missiles + attack_effects + missile_attack_effects + \
+    global space, soldier, eyemonsters, plantmonsters, powermonsters, bullet_effects, \
+    deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, missile_effects, special_attack_effects, ui
+    all_attacks = bullets + missiles + bullet_effects + missile_effects + \
                   special_attacks + special_attack_effects + bomb_attacks
     all_deleted_effects = deleted_eyemonsters + deleted_powermonsters + deleted_plantmonsters + deleted_swagemonsters
     all_items = special_attack_items + bomb_items
@@ -319,14 +319,14 @@ class UI():
 
 
 def enter():
-    global space, soldier, eyemonsters, plantmonsters, powermonsters, attack_effects,\
-        deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, missile_attack_effects, \
+    global space, soldier, eyemonsters, plantmonsters, powermonsters, bullet_effects,\
+        deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, missile_effects, \
         special_attack_effects, ui
     space = Space()
     soldier = Soldier()
     ui = UI()
-    attack_effects = []
-    missile_attack_effects = []
+    bullet_effects = []
+    missile_effects = []
     special_attack_effects = []
     eyemonsters = []
     plantmonsters = []
@@ -339,8 +339,8 @@ def enter():
 
 
 def exit():
-    global space, soldier, eyemonsters, bullets, plantmonsters, powermonsters, attack_effects, \
-        deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, missiles, missile_attack_effects, \
+    global space, soldier, eyemonsters, bullets, plantmonsters, powermonsters, bullet_effects, \
+        deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, missiles, missile_effects, \
         special_attacks, special_attack_effects, bomb_attacks, ui, special_attack_items, bomb_items
     del space
     del soldier
@@ -348,8 +348,8 @@ def exit():
     del bullets
     del plantmonsters
     del powermonsters
-    del attack_effects
-    del missile_attack_effects
+    del bullet_effects
+    del missile_effects
     del missiles
     del swagemonsters
     del deleted_eyemonsters
@@ -372,7 +372,7 @@ def resume():
     pass
 
 
-def handle_events():
+def handle_events(frame_time):
     events = get_events()
     for event in events:
         if event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
@@ -383,9 +383,8 @@ def handle_events():
             soldier.handle_events(event)
 
 
-def update():
+def update(frame_time):
     global current_time
-    frame_time = get_time() - current_time
     collision_attack_monster()
     collision_soldier_monster()
     soldier.update(frame_time)
@@ -400,7 +399,7 @@ def update():
         game_framework.change_state(Game_over)
 
 
-def draw():
+def draw(frame_time):
     clear_canvas()
     draw_all()
     #soldier.draw_bb()
