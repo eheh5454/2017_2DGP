@@ -26,7 +26,7 @@ class Eyemonster:
         self.frame = 0
         self.total_frames = 0
         if Eyemonster.image is None:
-           Eyemonster.image = load_image('Eye_monster.png')
+           Eyemonster.image = load_image('Eyemonster.png')
         self.hp = 20
         self.xrunspeed = self.RUN_SPEED_PPS
         self.yrunspeed = random.choice([-1, 1]) * self.RUN_SPEED_PPS
@@ -75,7 +75,7 @@ class Plantmonster:
         self.frame = 0
         self.total_frames = 0
         if Plantmonster.image is None:
-            self.image = load_image('Plant_monster.png')
+            self.image = load_image('Plantmonster.png')
         self.hp = 40
         self.xrunspeed = -self.RUN_SPEED_PPS
         self.yrunspeed = random.choice([-1, 1]) * self.RUN_SPEED_PPS
@@ -124,7 +124,7 @@ class Powermonster:
         self.frame = 0
         self.total_frames = 0
         if Powermonster.image is None:
-           Powermonster.image = load_image('Power_monster.png')
+           Powermonster.image = load_image('Powermonster.png')
         self.hp = 30
         self.xrunspeed = self.RUN_SPEED_PPS
         self.yrunspeed = random.choice([-1, 1]) * self.RUN_SPEED_PPS
@@ -173,7 +173,7 @@ class Swagemonster:
         self.frame = 0
         self.total_frames = 0
         if Swagemonster.image is None:
-            self.image = load_image('Swage_monster.png')
+            self.image = load_image('Swagemonster.png')
         self.hp = 30
         self.xrunspeed = random.choice([-1, 1]) * self.RUN_SPEED_PPS
         self.yrunspeed = -self.RUN_SPEED_PPS

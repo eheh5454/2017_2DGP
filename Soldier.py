@@ -184,7 +184,7 @@ class Bullet:
         self.frame = 0
         self.x, self.y = 0, 0
         if Bullet.image is None:
-            Bullet.image = load_image("basic_attack.png")
+            Bullet.image = load_image("bullet.png")
 
     def update(self, frame_time):
         self.runspeed = self.RUN_SPEED_PPS * frame_time
@@ -222,7 +222,7 @@ class Missile:
         self.dir = 0
         self.frame = 0
         if Missile.image is None:
-            Missile.image = load_image("missile_attack.png")
+            Missile.image = load_image("missile.png")
         self.x, self.y = 0, 0
 
     def update(self, frame_time):
@@ -261,7 +261,7 @@ class Bullet_effect():
         self.frame = 0
         self.total_frames = 0
         if Bullet_effect.image is None:
-            self.image = load_image("attack_effect.png")
+            self.image = load_image("bullet_effect.png")
 
     def update(self, frame_time):
         self.total_frames += self.FRAMES_PER_ACTION * self.ACTION_PER_TIME * frame_time
@@ -285,7 +285,7 @@ class Missile_effect():
         self.frame = 0
         self.total_frames = 0
         if Bullet_effect.image is None:
-            self.image = load_image("attack_effect2.png")
+            self.image = load_image("missile_effect.png")
 
     def update(self, frame_time):
         self.total_frames += self.FRAMES_PER_ACTION * self.ACTION_PER_TIME * frame_time
