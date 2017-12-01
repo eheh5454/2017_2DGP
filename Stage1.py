@@ -12,7 +12,6 @@ current_time = get_time()
 
 Score = 0
 
-space = None
 soldier = None
 ui = None
 bullet_effects = None
@@ -26,18 +25,7 @@ deleted_eyemonsters = None
 deleted_powermonsters = None
 deleted_plantmonsters = None
 deleted_swagemonsters = None
-
-
-# 맵크기 = 800X600픽셀, 1600cm x 1200cm, 16m x 12m
-class Space:
-    image = None
-
-    def __init__(self):
-        if self.image is None:
-            self.image = load_image("Space.jpg")
-
-    def draw(self):
-        self.image.draw(400, 300)
+background = None
 
 
 # 시간에 따라 monster 를 만들어주는 함수
@@ -285,7 +273,6 @@ def draw_all():
     all_deleted_effects = deleted_eyemonsters + deleted_powermonsters + deleted_plantmonsters + deleted_swagemonsters
     all_items = special_attack_items + bomb_items
     all_monsters = eyemonsters + plantmonsters + powermonsters + swagemonsters
-    space.draw()
     soldier.draw()
     for attack in all_attacks:
         attack.draw()
@@ -321,8 +308,8 @@ class UI():
 def enter():
     global space, soldier, eyemonsters, plantmonsters, powermonsters, bullet_effects,\
         deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, missile_effects, \
-        special_attack_effects, ui
-    space = Space()
+        special_attack_effects, ui, background
+    background = load_image("Space.jpg")
     soldier = Soldier()
     ui = UI()
     bullet_effects = []
@@ -339,10 +326,9 @@ def enter():
 
 
 def exit():
-    global space, soldier, eyemonsters, bullets, plantmonsters, powermonsters, bullet_effects, \
+    global soldier, eyemonsters, bullets, plantmonsters, powermonsters, bullet_effects, \
         deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, missiles, missile_effects, \
-        special_attacks, special_attack_effects, bomb_attacks, ui, special_attack_items, bomb_items
-    del space
+        special_attacks, special_attack_effects, bomb_attacks, ui, special_attack_items, bomb_items, background
     del soldier
     del eyemonsters
     del bullets
@@ -362,6 +348,7 @@ def exit():
     del ui
     del special_attack_items
     del bomb_items
+    del background
 
 
 def pause():
@@ -401,6 +388,7 @@ def update(frame_time):
 
 def draw(frame_time):
     clear_canvas()
+    background.draw(400, 300)
     draw_all()
     #soldier.draw_bb()
     update_canvas()
