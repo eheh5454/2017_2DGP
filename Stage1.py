@@ -26,7 +26,7 @@ deleted_powermonsters = None
 deleted_plantmonsters = None
 deleted_swagemonsters = None
 background = None
-
+stage1_BGM = None
 
 # 시간에 따라 monster 를 만들어주는 함수
 def make_all_monster(frame_time):
@@ -239,11 +239,11 @@ def make_items(frame_time):
     global special_attack_items_time, bomb_item_time
     special_attack_items_time += frame_time
     bomb_item_time += frame_time
-    if special_attack_items_time >= 60:
+    if special_attack_items_time >= 10:
         new_item = Special_attack_item()
         special_attack_items.append(new_item)
         special_attack_items_time = 0
-    if bomb_item_time >= 30:
+    if bomb_item_time >= 10:
         new_item = Bomb_item()
         bomb_items.append(new_item)
         bomb_item_time = 0
@@ -255,11 +255,13 @@ def update_all_items(frame_time):
     for item in special_attack_items:
         item.update(frame_time)
         if collision_check(item, soldier):
+            soldier.eat()
             soldier.special_attack_count += 1
             special_attack_items.remove(item)
     for item in bomb_items:
         item.update(frame_time)
         if collision_check(item, soldier):
+            soldier.eat()
             soldier.bomb_count += 1
             bomb_items.remove(item)
 
@@ -284,34 +286,28 @@ def draw_all():
         monster.draw()
     ui.draw()
 
-
-def draw_scene():
-    global soldier, eyemonsters, plantmonsters, powermonsters, swagemonsters
-    all_monsters = eyemonsters + plantmonsters + powermonsters + swagemonsters
-    soldier.draw()
-    for monster in all_monsters:
-        monster.draw()
-
-
 class UI():
     def __init__(self):
-        self.font = load_font('ENCR10B.TTF', 30)
+        self.font = load_font('YGD360.TTF', 30)
 
     def draw(self):
         global special_attack_count, bomb_count
         self.font.draw(20, 550, 'Life:%d' % soldier.hp, (220, 220, 0))
         self.font.draw(20, 520, 'Score:%d' % Score, (220, 220, 0))
-        self.font.draw(500, 550, "Special Attack:%d" % soldier.special_attack_count, (220, 220, 0))
-        self.font.draw(680, 520, "Bomb:%d" % soldier.bomb_count, (220, 220, 0))
+        self.font.draw(540, 550, "Special Attack:%d" % soldier.special_attack_count, (220, 220, 0))
+        self.font.draw(670, 520, "Bomb:%d" % soldier.bomb_count, (220, 220, 0))
 
 
 def enter():
     global space, soldier, eyemonsters, plantmonsters, powermonsters, bullet_effects,\
-        deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, missile_effects, \
-        special_attack_effects, ui, background
+        deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, \
+        missile_effects, special_attack_effects, ui, background, stage1_BGM
     background = load_image("Space.jpg")
     soldier = Soldier()
     ui = UI()
+    stage1_BGM = load_music("Stage1BGM.mp3")
+    stage1_BGM.set_volume(64)
+    stage1_BGM.repeat_play()
     bullet_effects = []
     missile_effects = []
     special_attack_effects = []
@@ -328,7 +324,7 @@ def enter():
 def exit():
     global soldier, eyemonsters, bullets, plantmonsters, powermonsters, bullet_effects, \
         deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, missiles, missile_effects, \
-        special_attacks, special_attack_effects, bomb_attacks, ui, special_attack_items, bomb_items, background
+        special_attacks, special_attack_effects, bomb_attacks, ui, special_attack_items, bomb_items, background, stage1_BGM
     del soldier
     del eyemonsters
     del bullets
@@ -349,6 +345,8 @@ def exit():
     del special_attack_items
     del bomb_items
     del background
+    del stage1_BGM
+
 
 
 def pause():

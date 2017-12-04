@@ -45,6 +45,13 @@ class Soldier:
         self.hp = 100
         self.bomb_count = 5
         self.special_attack_count = 3
+        self.attack_sound = load_wav("Bullet_sound.wav")
+        self.attack_sound.set_volume(40)
+        self.eat_sound = load_wav("pickup.wav")
+        self.eat_sound.set_volume(64)
+
+    def eat(self):
+        self.eat_sound.play()
 
     def move(self):
         if self.UP:
@@ -101,6 +108,7 @@ class Soldier:
             self.DOWN = False
         # a키를 누르면 공격
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_a):
+            self.attack_sound.play()
             if Stage1.Score >= 100:
                 new_attack = Missile()
             else:
@@ -185,6 +193,7 @@ class Bullet:
         self.x, self.y = 0, 0
         if Bullet.image is None:
             Bullet.image = load_image("bullet.png")
+
 
     def update(self, frame_time):
         self.runspeed = self.RUN_SPEED_PPS * frame_time
@@ -287,6 +296,7 @@ class Missile_effect():
         if Bullet_effect.image is None:
             self.image = load_image("missile_effect.png")
 
+
     def update(self, frame_time):
         self.total_frames += self.FRAMES_PER_ACTION * self.ACTION_PER_TIME * frame_time
         self.frame = int(self.total_frames)
@@ -365,7 +375,7 @@ class Special_attack():
 
 
 class Special_attack_effect():
-    TIME_PER_ACTION = 0.5
+    TIME_PER_ACTION = 1
     ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
     FRAMES_PER_ACTION = 6
 
@@ -378,6 +388,12 @@ class Special_attack_effect():
         self.total_frames = 0
         if Special_attack_effect.image is None:
             self.image = load_image("special_attack_effect.png")
+        self.sound = load_wav("Bomb_sound.wav")
+        self.sound.set_volume(64)
+        self.sound.play()
+
+    def explosion(self):
+        self.sound.play()
 
     def update(self, frame_time):
         self.total_frames += self.FRAMES_PER_ACTION * self.ACTION_PER_TIME * frame_time

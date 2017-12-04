@@ -6,7 +6,7 @@ import Stage1
 image = None
 current_time = 0
 space_to_start = None
-
+sound = None
 
 class Space_to_start():
     TIME_PER_ACTION = 2
@@ -28,15 +28,20 @@ class Space_to_start():
 
 
 def enter():
-    global image, space_to_start
+    global image, space_to_start, sound
     open_canvas()
     image = load_image('title.png')
     space_to_start = Space_to_start()
+    sound = load_music("TitleBGM.mp3")
+    sound.set_volume(64)
+    sound.repeat_play()
+
 
 def exit():
-    global image, space_to_start
+    global image, space_to_start, sound
     del image
     del space_to_start
+    del sound
     close_canvas()
 
 
