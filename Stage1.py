@@ -7,6 +7,7 @@ from Resource import *
 from Soldier import *
 from Monsters import *
 from Items import *
+from Boss import *
 
 current_time = get_time()
 
@@ -27,6 +28,8 @@ deleted_plantmonsters = None
 deleted_swagemonsters = None
 background = None
 stage1_BGM = None
+alienboss = None
+
 
 # 시간에 따라 monster 를 만들어주는 함수
 def make_all_monster(frame_time):
@@ -301,7 +304,7 @@ class UI():
 def enter():
     global space, soldier, eyemonsters, plantmonsters, powermonsters, bullet_effects,\
         deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, \
-        missile_effects, special_attack_effects, ui, background, stage1_BGM
+        missile_effects, special_attack_effects, ui, background, stage1_BGM,alienboss
     background = load_image("Space.jpg")
     soldier = Soldier()
     ui = UI()
@@ -319,12 +322,14 @@ def enter():
     deleted_powermonsters = []
     deleted_plantmonsters = []
     deleted_swagemonsters = []
+    alienboss = AlienBoss()
 
 
 def exit():
     global soldier, eyemonsters, bullets, plantmonsters, powermonsters, bullet_effects, \
         deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, missiles, missile_effects, \
-        special_attacks, special_attack_effects, bomb_attacks, ui, special_attack_items, bomb_items, background, stage1_BGM
+        special_attacks, special_attack_effects, bomb_attacks, ui, special_attack_items, bomb_items, background, stage1_BGM, \
+        alienboss
     del soldier
     del eyemonsters
     del bullets
@@ -346,6 +351,7 @@ def exit():
     del bomb_items
     del background
     del stage1_BGM
+    del alienboss
 
 
 
@@ -375,6 +381,7 @@ def update(frame_time):
     soldier.update(frame_time)
     make_all_monster(frame_time)
     update_all_monster(frame_time)
+    alienboss.update(frame_time)
     deleted_effect_update(frame_time)
     update_all_attack(frame_time)
     make_items(frame_time)
@@ -388,6 +395,7 @@ def draw(frame_time):
     clear_canvas()
     background.draw(400, 300)
     draw_all()
+    alienboss.draw()
     #soldier.draw_bb()
     update_canvas()
 

@@ -1,7 +1,7 @@
 from pico2d import *
 import game_framework
 import Stage1
-
+import Title
 
 image = None
 space = None
@@ -42,6 +42,7 @@ def handle_events(frame_time):
                 game_framework.quit()
             elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_p):
                 game_framework.pop_state()
+
 
 
 def pause():
