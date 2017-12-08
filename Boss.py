@@ -20,7 +20,7 @@ class AlienBoss:
         self.frame = 0
         self.total_frames = 0
         if AlienBoss.image is None:
-           AlienBoss.image = load_image('AlienBoss2.png')
+           AlienBoss.image = load_image('AlienBoss3.png')
         self.hp = 500
         self.xrunspeed = self.RUN_SPEED_PPS
         self.yrunspeed = random.choice([-1, 1]) * self.RUN_SPEED_PPS
@@ -40,11 +40,13 @@ class AlienBoss:
             self.dir = 0
         if self.y > 600:
             self.yrunspeed = -self.yrunspeed
+            self.dir = 2
         if self.y < 0:
             self.yrunspeed = -self.yrunspeed
+            self.dir = 3
 
     def draw(self):
-        self.image.clip_draw(self.frame*200, self.dir*150, 200, 150, self.x, self.y)
+        self.image.clip_draw(self.frame*300, self.dir*200, 300, 200, self.x, self.y)
 
     def get_bb(self):
         return self.x - 100, self.y - 100, self.x + 75, self.y + 75

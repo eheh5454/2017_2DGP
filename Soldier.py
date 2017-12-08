@@ -109,7 +109,8 @@ class Soldier:
         # a키를 누르면 공격
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_a):
             self.attack_sound.play()
-            if Stage1.Score >= 100:
+            #스코어가 200 넘어가면 어택 업그레이드
+            if Stage1.Score >= 200:
                 new_attack = Missile()
             else:
                 new_attack = Bullet()
