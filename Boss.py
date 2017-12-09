@@ -15,6 +15,7 @@ class AlienBoss:
 
     image = None
 
+
     def __init__(self):
         self.x, self.y = random.randint(0, 200), random.randint(0, 100)
         self.frame = 0

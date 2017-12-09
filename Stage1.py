@@ -101,11 +101,20 @@ def collision_soldier_monster():
                 soldier.hp -= monster.power
 
 
+#alienboss와 soldier의 충돌 처리
+def collision_soldier_alienboss():
+    global soldier, alienboss
+    if collision_check(soldier, alienboss):
+        soldier.hp -= 10
+
+
+
 # attack 과 monster 의 충돌 처리
 def collision_attack_monster():
     global eyemonsters, plantmonsters, powermonsters, swagemonsters, missiles, bullets,\
-           special_attack_effects, bomb_attacks
+           special_attack_effects, bomb_attacks, alienboss
     all_monsters = eyemonsters + plantmonsters + powermonsters + swagemonsters
+    all_monsters.append(alienboss)
     # basic_attack 과 monster 의 충돌 처리
     for new_attack in bullets:
         for monster in all_monsters:
@@ -375,12 +384,15 @@ def handle_events(frame_time):
 
 
 def update(frame_time):
-    global current_time
+    global current_time,alienboss
     collision_attack_monster()
     collision_soldier_monster()
+    collision_soldier_alienboss()
     soldier.update(frame_time)
     make_all_monster(frame_time)
     update_all_monster(frame_time)
+    if alienboss.hp <= 0:
+        del alienboss
     alienboss.update(frame_time)
     deleted_effect_update(frame_time)
     update_all_attack(frame_time)
