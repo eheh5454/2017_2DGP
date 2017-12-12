@@ -1,0 +1,48 @@
+Sun Dec 10 17:31:17 2017 +0900 alienboss 5차
+Sat Dec 9 23:13:11 2017 +0900 alienboss 4차
+Fri Dec 8 21:37:37 2017 +0900 AlienBoss 3차
+Thu Dec 7 16:38:44 2017 +0900 boss 1차
+Wed Dec 6 16:52:38 2017 +0900 boss image first edit
+Mon Dec 4 17:02:07 2017 +0900 add bgm, attack sound, eat sound
+Fri Dec 1 22:46:15 2017 +0900 delete space class
+Thu Nov 30 22:22:06 2017 +0900 resource refactoring
+Wed Nov 29 21:27:33 2017 +0900 attack effect name refactoring and game_framework update
+Tue Nov 28 22:21:45 2017 +0900 refactoring monsters
+Mon Nov 27 16:05:22 2017 +0900 Refactoring attacks
+Mon Nov 27 10:30:33 2017 +0900 missile_attack_effect
+Sun Nov 26 22:06:10 2017 +0900 코드 간단 정리
+Sat Nov 25 15:33:55 2017 +0900 soldier 충돌박스 수정
+Thu Nov 23 15:59:01 2017 +0900 변수 수정, name수정
+Wed Nov 22 10:28:32 2017 +0900 monster출현 밸런스 조정
+Tue Nov 21 21:52:22 2017 +0900 add gameover score, special_attack_item, bomb_item
+Tue Nov 21 17:14:23 2017 +0900 2차발표 수정
+Tue Nov 21 17:04:40 2017 +0900 충돌체크 전면수정, damaged 모션 수정, 무기업그레이드 구현
+Mon Nov 20 15:55:44 2017 +0900 soldier 와 monster의 충돌처리, bomb와 monster의 충돌처리
+Sun Nov 19 15:45:36 2017 +0900 add ui, game_over
+Sun Nov 19 12:10:00 2017 +0900 add throw_bomb
+Sat Nov 18 23:12:07 2017 +0900 soldier state upgrade
+Fri Nov 17 22:42:01 2017 +0900 add title
+Fri Nov 17 06:44:29 2017 +0900 test
+Thu Nov 16 16:29:40 2017 +0900 함수 정리, missile_attack 추가
+Wed Nov 15 17:13:01 2017 +0900 swage_monster 추가. deleted_effect 수정
+Tue Nov 14 10:36:22 2017 +0900 deleted effect 추가, 충돌처리 추가
+Mon Nov 13 17:03:05 2017 +0900 충돌체크, attack_effect 추가
+Mon Nov 13 10:06:44 2017 +0900 add TIME_PER_ACTION, 함수정리
+Sun Nov 12 18:21:41 2017 +0900 power_monster 추가
+Sat Nov 11 15:42:32 2017 +0900 plant_monster add, basic_attack에 시간개념 추가
+Fri Nov 10 21:51:13 2017 +0900 객체에 time 전부 적용
+Thu Nov 9 17:18:43 2017 +0900 make_monster함수와 time개념 추가
+Wed Nov 8 16:47:01 2017 +0900 파일분리, 기본공격 구현
+Tue Nov 7 20:53:29 2017 +0900 몬스터 리스트 생성
+Mon Nov 6 14:58:07 2017 +0900 soldier 컨트롤러
+Sun Nov 5 17:38:16 2017 +0900 monster hp
+Sat Nov 4 22:40:02 2017 +0900 스탯추가
+Thu Nov 2 15:37:31 2017 +0900 캐릭터 이동구현2
+Wed Nov 1 23:16:53 2017 +0900 make Eye_monster
+Tue Oct 31 19:55:52 2017 +0900 솔져 컨트롤
+Mon Oct 30 16:22:40 2017 +0900 배경화면, 군인 구현
+Sat Oct 21 16:47:10 2017 +0900 리소스 수집
+Thu Oct 19 16:58:17 2017 +0900 기획발표 마무리
+Tue Oct 17 20:58:08 2017 +0900 기획발표 2차수정
+Mon Oct 16 22:41:58 2017 +0900 기획발표 1차
+Mon Oct 16 22:11:07 2017 +0900 First

@@ -391,7 +391,6 @@ class Special_attack_effect():
             self.image = load_image("special_attack_effect.png")
         self.sound = load_wav("Bomb_sound.wav")
         self.sound.set_volume(64)
-        self.sound.play()
 
     def explosion(self):
         self.sound.play()

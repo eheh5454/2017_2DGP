@@ -68,7 +68,7 @@ def make_all_monster(frame_time):
         new_swage_monster = Swagemonster()
         swagemonsters.append(new_swage_monster)
         swagemonster_time = 0
-    if alienbosstime > 10:
+    if alienbosstime > 40:
         new_alienboss = AlienBoss()
         alienboss_list.append(new_alienboss)
         alienbosstime = 0
@@ -242,6 +242,7 @@ def update_all_attack(frame_time):
             bomb_attacks.remove(new_bomb_attack)
             new_special_attack_effect = Special_attack_effect()
             new_special_attack_effect.x, new_special_attack_effect.y = new_bomb_attack.x, new_bomb_attack.y
+            new_special_attack_effect.explosion()
             special_attack_effects.append(new_special_attack_effect)
     for attack_effect in bullet_effects:
         attack_effect.update(frame_time)
@@ -257,6 +258,7 @@ def update_all_attack(frame_time):
             special_attacks.remove(new_attack)
             new_special_attack_effect = Special_attack_effect()
             new_special_attack_effect.x, new_special_attack_effect.y = new_attack.x, new_attack.y
+            new_special_attack_effect.explosion()
             special_attack_effects.append(new_special_attack_effect)
     for new_special_attack_effect in special_attack_effects:
         new_special_attack_effect.update(frame_time)
@@ -268,11 +270,11 @@ def make_items(frame_time):
     global special_attack_items_time, bomb_item_time
     special_attack_items_time += frame_time
     bomb_item_time += frame_time
-    if special_attack_items_time >= 10:
+    if special_attack_items_time >= 30:
         new_item = Special_attack_item()
         special_attack_items.append(new_item)
         special_attack_items_time = 0
-    if bomb_item_time >= 10:
+    if bomb_item_time >= 20:
         new_item = Bomb_item()
         bomb_items.append(new_item)
         bomb_item_time = 0
