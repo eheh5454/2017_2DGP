@@ -68,7 +68,7 @@ def make_all_monster(frame_time):
         new_swage_monster = Swagemonster()
         swagemonsters.append(new_swage_monster)
         swagemonster_time = 0
-    if alienbosstime > 40:
+    if alienbosstime > 60:
         new_alienboss = AlienBoss()
         alienboss_list.append(new_alienboss)
         alienbosstime = 0
@@ -120,6 +120,19 @@ def collision_soldier_alienboss(frame_time):
                  soldier.state = soldier.RIGHT_DAMAGED
                  soldier.x -= alienboss.xrunspeed * frame_time * 3
                  soldier.y -= alienboss.yrunspeed * frame_time * 3
+
+
+# soldier 와 bossattack 의 충돌 처리
+def collision_soldier_bossattak():
+    global soldier, boss_attacks
+    for attack in boss_attacks:
+        if collision_check(soldier, attack):
+            soldier.hp -= attack.power
+            if soldier.state in (soldier.RIGHT_RUN, soldier.RIGHT_THROW_BOMB, soldier.RIGHT_ATTACK):
+                soldier.state = soldier.RIGHT_DAMAGED
+            elif soldier.state in (soldier.LEFT_RUN, soldier.LEFT_THROW_BOMB, soldier.LEFT_ATTACK):
+                soldier.state = soldier.LEFT_DAMAGED
+            boss_attacks.remove(attack)
 
 
 # attack 과 monster 의 충돌 처리
@@ -227,7 +240,7 @@ def deleted_effect_update(frame_time):
 
 # 모든 공격과 이펙트 update
 def update_all_attack(frame_time):
-    global bullets, missiles, bomb_attacks, bullet_effects, missile_effects, special_attacks, special_attack_effects
+    global bullets, missiles, bomb_attacks, bullet_effects, missile_effects, special_attacks, special_attack_effects, boss_attacks
     for new_attack in bullets:
         new_attack.update(frame_time)
         if new_attack.x > 800 or new_attack.x < 0:
@@ -264,6 +277,8 @@ def update_all_attack(frame_time):
         new_special_attack_effect.update(frame_time)
         if new_special_attack_effect.frame == 6:
             special_attack_effects.remove(new_special_attack_effect)
+    for boss_attack in boss_attacks:
+        boss_attack.update(frame_time)
 
 
 def make_items(frame_time):
@@ -300,9 +315,10 @@ def update_all_items(frame_time):
 # 모든 객체 draw
 def draw_all():
     global space, soldier, eyemonsters, plantmonsters, powermonsters, bullet_effects, \
-    deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, missile_effects, special_attack_effects, ui
+    deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, \
+    missile_effects, special_attack_effects, ui, boss_attacks
     all_attacks = bullets + missiles + bullet_effects + missile_effects + \
-                  special_attacks + special_attack_effects + bomb_attacks
+                  special_attacks + special_attack_effects + bomb_attacks + boss_attacks
     all_deleted_effects = deleted_eyemonsters + deleted_powermonsters + deleted_plantmonsters + deleted_swagemonsters
     all_items = special_attack_items + bomb_items
     all_monsters = eyemonsters + plantmonsters + powermonsters + swagemonsters + alienboss_list
@@ -333,7 +349,7 @@ class UI():
 def enter():
     global space, soldier, eyemonsters, plantmonsters, powermonsters, bullet_effects,\
         deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, \
-        missile_effects, special_attack_effects, ui, background, stage1_BGM, alienboss_list
+        missile_effects, special_attack_effects, ui, background, stage1_BGM, alienboss_list, boss_attacks
     background = load_image("Space.jpg")
     soldier = Soldier()
     ui = UI()
@@ -358,7 +374,7 @@ def exit():
     global soldier, eyemonsters, bullets, plantmonsters, powermonsters, bullet_effects, \
         deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, missiles, missile_effects, \
         special_attacks, special_attack_effects, bomb_attacks, ui, special_attack_items, bomb_items, background, stage1_BGM, \
-        alienboss_list
+        alienboss_list, boss_attacks
     del soldier
     del eyemonsters
     del bullets
@@ -381,7 +397,7 @@ def exit():
     del background
     del stage1_BGM
     del alienboss_list
-
+    del boss_attacks
 
 
 def pause():
@@ -408,6 +424,7 @@ def update(frame_time):
     collision_attack_monster()
     collision_soldier_monster()
     collision_soldier_alienboss(frame_time)
+    collision_soldier_bossattak()
     soldier.update(frame_time)
     make_all_monster(frame_time)
     update_all_monster(frame_time)
