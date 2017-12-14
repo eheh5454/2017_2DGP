@@ -1,11 +1,6 @@
 from pico2d import *
 import random
 
-eyemonster_time = 0
-plantmonster_time = 0
-powermonster_time = 0
-swagemonster_time = 0
-
 
 # eye_monster의 크기 = 70x70 픽셀, 140cm x 140cm
 class Eyemonster:

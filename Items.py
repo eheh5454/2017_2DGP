@@ -1,10 +1,8 @@
 from pico2d import *
 import random
 
-special_attack_items = []
-special_attack_items_time = 0
-bomb_items = []
-bomb_item_time = 0
+
+
 
 class Special_attack_item():
     PIXEL_PER_METER = (10.0 / 0.2)

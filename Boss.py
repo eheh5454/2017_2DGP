@@ -1,13 +1,13 @@
 from pico2d import *
 import random
+import Stage1
 
-alienbosstime = 0.0
 
 boss_attack_text = '{ \
     "attack1" : {"x":50, "y":550},"attack2" : {"x":150, "y":550},"attack3" : {"x":250, "y":550},"attack4" : {"x":350, "y":550},\
     "attack5" : {"x":450, "y":550},"attack6" : {"x":550, "y":550}, "attack7":{"x":650,"y":550},"attack8":{"x":750,"y":550}\
 }'
-boss_attacks = []
+
 
 class AlienBoss:
     RIGHT_RUN, LEFT_RUN, RIGHT_SPEED_RUN, LEFT_SPEED_RUN = 0, 1, 2, 3
@@ -59,13 +59,13 @@ class AlienBoss:
         if self.y < 0:
             self.yrunspeed = -self.yrunspeed
             self.state = self.LEFT_SPEED_RUN
-        if self.attacktime >= 10.0:
+        if self.attacktime >= 5.0:
             boss_attack_data = json.loads(boss_attack_text)
             for data in boss_attack_data:
                 new_boss_attack = Boss_Attack()
                 new_boss_attack.x = boss_attack_data[data]['x']
                 new_boss_attack.y = boss_attack_data[data]['y']
-                boss_attacks.append(new_boss_attack)
+                Stage1.boss_attacks.append(new_boss_attack)
             self.attacktime = 0
 
     def draw(self):
