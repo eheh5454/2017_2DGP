@@ -81,7 +81,7 @@ def make_all_monster(frame_time):
         new_swage_monster = Swagemonster()
         swagemonsters.append(new_swage_monster)
         swagemonster_time = 0
-    if alienbosstime > 10.0:
+    if alienbosstime > 60.0:
         new_alienboss = AlienBoss()
         alienboss_list.append(new_alienboss)
         alienbosstime = 0

@@ -29,7 +29,7 @@ class AlienBoss:
         self.total_frames = 0
         if AlienBoss.image is None:
            AlienBoss.image = load_image('AlienBoss3.png')
-        self.hp = 700
+        self.hp = 500
         self.xrunspeed = self.RUN_SPEED_PPS
         self.yrunspeed = random.choice([-1, 1]) * self.RUN_SPEED_PPS
         self.power = 1
@@ -42,8 +42,8 @@ class AlienBoss:
         self.frame = int(self.total_frames) % 8
         self.attacktime += frame_time
         if self.state in (self.RIGHT_SPEED_RUN, self.LEFT_SPEED_RUN):
-            self.x += self.xrunspeed * frame_time * 2
-            self.y += self.yrunspeed * frame_time * 2
+            self.x += self.xrunspeed * frame_time * 1.5
+            self.y += self.yrunspeed * frame_time * 1.5
         else:
             self.x += self.xrunspeed * frame_time
             self.y += self.yrunspeed * frame_time
@@ -72,7 +72,7 @@ class AlienBoss:
         self.image.clip_draw(self.frame*300, self.state*200, 300, 200, self.x, self.y)
 
     def get_bb(self):
-        return self.x - 150, self.y - 150, self.x + 100, self.y + 100
+        return self.x - 150, self.y - 20, self.x + 100, self.y + 20
 
     def draw_bb(self):
         draw_rectangle(*self.get_bb())
