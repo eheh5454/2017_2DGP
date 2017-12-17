@@ -63,6 +63,8 @@ class Soldier:
 
     def update(self, frame_time):
         self.runspeed = self.RUN_SPEED_PPS * frame_time
+        self.x = clamp(0, self.x, 800)
+        self.y = clamp(0, self.y, 600)
         self.move()
         # 오른쪽 데미지를 입었을때 프레임이 5가 되면 오른쪽 달리기 상태로 전환
         if self.state == self.RIGHT_DAMAGED:
