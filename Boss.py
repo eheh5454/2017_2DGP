@@ -1,6 +1,6 @@
 from pico2d import *
 import random
-import Stage1
+import Stage
 
 
 boss_attack_text = '{ \
@@ -65,7 +65,7 @@ class AlienBoss:
                 new_boss_attack = Boss_Attack()
                 new_boss_attack.x = boss_attack_data[data]['x']
                 new_boss_attack.y = boss_attack_data[data]['y']
-                Stage1.boss_attacks.append(new_boss_attack)
+                Stage.boss_attacks.append(new_boss_attack)
             self.attacktime = 0
 
     def draw(self):

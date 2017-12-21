@@ -1,6 +1,6 @@
 from pico2d import *
 
-import Stage1
+import Stage
 import Title
 
 import game_framework

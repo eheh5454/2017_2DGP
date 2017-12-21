@@ -2,8 +2,6 @@ from pico2d import *
 import random
 
 
-
-
 class Special_attack_item():
     PIXEL_PER_METER = (10.0 / 0.2)
     RUN_SPEED_KMPH = 15.0

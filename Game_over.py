@@ -1,6 +1,6 @@
 from pico2d import *
 import game_framework
-import Stage1
+import Stage
 
 
 image = None
@@ -33,7 +33,7 @@ def draw(frame_time):
     clear_canvas()
     space.draw(400, 300)
     image.draw(400, 300)
-    score_font.draw(200, 400, 'Your Score:%d' % Stage1.Score, (220, 220, 0))
+    score_font.draw(200, 400, 'Your Score:%d' % Stage.Score, (220, 220, 0))
     restart_font.draw(50, 100, 'SPACE TO RESTART', (250, 250, 0))
     update_canvas()
 

@@ -26,7 +26,7 @@ deleted_powermonsters = None
 deleted_plantmonsters = None
 deleted_swagemonsters = None
 background = None
-stage1_BGM = None
+stage_BGM = None
 alienboss_list = None
 bullets = None
 missiles = None
@@ -58,6 +58,7 @@ def make_all_monster(frame_time):
     makecounter_time += frame_time
     if makecounter_time > 30.0:
         makecounter += 1
+        makecounter_time = 0
     if eyemonster_time > 5:
         for i in range(makecounter):
             new_eye_monster = Eyemonster()
@@ -359,16 +360,16 @@ class UI():
 def enter():
     global space, soldier, eyemonsters, plantmonsters, powermonsters, bullet_effects,\
         deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, \
-        missile_effects, special_attack_effects, ui, background, stage1_BGM, alienboss_list, boss_attacks, \
+        missile_effects, special_attack_effects, ui, background, stage_BGM, alienboss_list, boss_attacks, \
         alienboss_list, bullets, missiles, special_attacks,bomb_attacks,boss_attacks,special_attack_items, bomb_items, Score, \
         alienbosstime, eyemonster_time, plantmonster_time, swagemonster_time, powermonster_time, special_attack_items_time,\
         bomb_item_time, makecounter, makecounter_time
     background = load_image("Space.jpg")
     soldier = Soldier()
     ui = UI()
-    stage1_BGM = load_music("Stage1BGM.mp3")
-    stage1_BGM.set_volume(64)
-    stage1_BGM.repeat_play()
+    stage_BGM = load_music("StageBGM.mp3")
+    stage_BGM.set_volume(64)
+    stage_BGM.repeat_play()
     bullet_effects = []
     missile_effects = []
     special_attack_effects = []
@@ -403,7 +404,7 @@ def enter():
 def exit():
     global soldier, eyemonsters, bullets, plantmonsters, powermonsters, bullet_effects, \
         deleted_eyemonsters, deleted_powermonsters, deleted_plantmonsters, swagemonsters, deleted_swagemonsters, missiles, missile_effects, \
-        special_attacks, special_attack_effects, bomb_attacks, ui, special_attack_items, bomb_items, background, stage1_BGM, \
+        special_attacks, special_attack_effects, bomb_attacks, ui, special_attack_items, bomb_items, background, stage_BGM, \
         alienboss_list, boss_attacks, Score
     del soldier
     del eyemonsters
@@ -425,7 +426,7 @@ def exit():
     del special_attack_items
     del bomb_items
     del background
-    del stage1_BGM
+    del stage_BGM
     del alienboss_list
     del boss_attacks
 

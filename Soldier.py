@@ -1,6 +1,6 @@
 from pico2d import *
 import json
-import Stage1
+import Stage
 
 
 special_attack_text = '{ \
@@ -108,7 +108,7 @@ class Soldier:
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_a):
             self.attack_sound.play()
             #스코어가 200 넘어가면 어택 업그레이드
-            if Stage1.Score >= 200:
+            if Stage.Score >= 200:
                 new_attack = Missile()
             else:
                 new_attack = Bullet()
@@ -118,9 +118,9 @@ class Soldier:
                self.state = self.RIGHT_ATTACK
                self.frame = 0
                if new_attack == Missile():
-                   Stage1.missiles.append(new_attack)
+                   Stage.missiles.append(new_attack)
                else:
-                   Stage1.bullets.append(new_attack)
+                   Stage.bullets.append(new_attack)
             # LEFT_RUN state 이면 왼쪽 발사
             elif self.state in (self.LEFT_RUN, self.LEFT_ATTACK):
                 new_attack.x, new_attack.y = self.x - 10, self.y
@@ -129,9 +129,9 @@ class Soldier:
                 self.state = self.LEFT_ATTACK
                 self.frame = 0
                 if new_attack == Missile():
-                    Stage1.missiles.append(new_attack)
+                    Stage.missiles.append(new_attack)
                 else:
-                    Stage1.bullets.append(new_attack)
+                    Stage.bullets.append(new_attack)
         # s키를 누르면 수류탄 투척
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_s):
             if self.bomb_count <= 0:
@@ -143,7 +143,7 @@ class Soldier:
                     self.state = self.RIGHT_THROW_BOMB
                     self.frame = 0
                     new_attack.x, new_attack.y = self.x + 10, self.y - 25
-                    Stage1.bomb_attacks.append(new_attack)
+                    Stage.bomb_attacks.append(new_attack)
                     self.bomb_count -= 1
                 # LEFT_RUN state 이면 왼쪽 발사
                 elif self.state in (self.LEFT_RUN, self.LEFT_THROW_BOMB):
@@ -151,7 +151,7 @@ class Soldier:
                     self.frame = 0
                     new_attack.x, new_attack.y = self.x - 10, self.y - 25
                     new_attack.dir = 1
-                    Stage1.bomb_attacks.append(new_attack)
+                    Stage.bomb_attacks.append(new_attack)
                     self.bomb_count -= 1
         # 필살기 사용
         if (event.type, event.key) == (SDL_KEYDOWN, SDLK_d):
@@ -163,7 +163,7 @@ class Soldier:
                     special_attack = Special_attack()
                     special_attack.x = special_attack_data[data]['x']
                     special_attack.y = special_attack_data[data]['y']
-                    Stage1.special_attacks.append(special_attack)
+                    Stage.special_attacks.append(special_attack)
                 self.special_attack_count -= 1
 
     # 위쪽 충돌박스
