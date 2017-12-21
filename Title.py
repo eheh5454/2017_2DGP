@@ -17,7 +17,7 @@ class Space_to_start():
         self.total_frames = 0
         self.frame = 0
         self.total_frames = 0
-        self.image = load_image('space_to_start.png')
+        self.image = load_image('Resource//space_to_start.png')
 
     def update(self, frame_time):
         self.total_frames += self.ACTION_PER_TIME * self.FRAMES_PER_ACTION * frame_time
@@ -30,9 +30,9 @@ class Space_to_start():
 def enter():
     global image, space_to_start, sound
     open_canvas()
-    image = load_image('title.png')
+    image = load_image('Resource//title.png')
     space_to_start = Space_to_start()
-    sound = load_music("TitleBGM.mp3")
+    sound = load_music("Resource//TitleBGM.mp3")
     sound.set_volume(64)
     sound.repeat_play()
 

@@ -347,7 +347,7 @@ def draw_all():
 
 class UI():
     def __init__(self):
-        self.font = load_font('YGD360.TTF', 30)
+        self.font = load_font('Resource//YGD360.TTF', 30)
 
     def draw(self):
         global special_attack_count, bomb_count
@@ -364,10 +364,10 @@ def enter():
         alienboss_list, bullets, missiles, special_attacks,bomb_attacks,boss_attacks,special_attack_items, bomb_items, Score, \
         alienbosstime, eyemonster_time, plantmonster_time, swagemonster_time, powermonster_time, special_attack_items_time,\
         bomb_item_time, makecounter, makecounter_time
-    background = load_image("Space.jpg")
+    background = load_image("Resource//Space.jpg")
     soldier = Soldier()
     ui = UI()
-    stage_BGM = load_music("StageBGM.mp3")
+    stage_BGM = load_music("Resource//StageBGM.mp3")
     stage_BGM.set_volume(64)
     stage_BGM.repeat_play()
     bullet_effects = []

@@ -10,10 +10,10 @@ restart_font = None
 
 def enter():
     global image, space, score_font, restart_font
-    image = load_image('game_over.png')
-    space = load_image('Space.jpg')
-    score_font = load_font('ENCR10B.TTF', 50)
-    restart_font = load_font('YGD360.TTF', 70)
+    image = load_image('Resource//game_over.png')
+    space = load_image('Resource//Space.jpg')
+    score_font = load_font('Resource//YGD360.TTF', 50)
+    restart_font = load_font('Resource//YGD360.TTF', 70)
 
 
 def exit():

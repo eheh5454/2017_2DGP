@@ -18,7 +18,7 @@ class Special_attack_item():
     def __init__(self):
         self.x, self.y = random.randint(0, 800), random.randint(0, 600)
         if Special_attack_item.image is None:
-            Special_attack_item.image = load_image("special_attack_item.png")
+            Special_attack_item.image = load_image("Resource//special_attack_item.png")
         self.frame = 0
         self.total_frames = 0
         vector = [-1, 1]
@@ -62,7 +62,7 @@ class Bomb_item():
     def __init__(self):
         self.x, self.y = random.randint(0, 800), random.randint(0, 600)
         if Bomb_item.image is None:
-            Bomb_item.image = load_image("bomb_item.png")
+            Bomb_item.image = load_image("Resource//bomb_item.png")
         self.frame = 0
         self.total_frames = 0
         vector = [-1, 1]

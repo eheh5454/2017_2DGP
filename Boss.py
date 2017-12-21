@@ -28,7 +28,7 @@ class AlienBoss:
         self.frame = 0
         self.total_frames = 0
         if AlienBoss.image is None:
-           AlienBoss.image = load_image('AlienBoss3.png')
+           AlienBoss.image = load_image('Resource//AlienBoss.png')
         self.hp = 500
         self.xrunspeed = self.RUN_SPEED_PPS
         self.yrunspeed = random.choice([-1, 1]) * self.RUN_SPEED_PPS
@@ -92,7 +92,7 @@ class Boss_Attack:
         self.y = 0
         self.power = 10
         if Boss_Attack.image is None:
-            Boss_Attack.image = load_image("BossAttack.png")
+            Boss_Attack.image = load_image("Resource//BossAttack.png")
 
     def update(self, frame_time):
         self.y -= self.RUN_SPEED_PPS * frame_time

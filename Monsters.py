@@ -21,7 +21,7 @@ class Eyemonster:
         self.frame = 0
         self.total_frames = 0
         if Eyemonster.image is None:
-           Eyemonster.image = load_image('Eyemonster.png')
+           Eyemonster.image = load_image('Resource//Eyemonster.png')
         self.hp = 20
         self.xrunspeed = self.RUN_SPEED_PPS
         self.yrunspeed = random.choice([-1, 1]) * self.RUN_SPEED_PPS
@@ -70,7 +70,7 @@ class Plantmonster:
         self.frame = 0
         self.total_frames = 0
         if Plantmonster.image is None:
-            self.image = load_image('Plantmonster.png')
+            self.image = load_image('Resource//Plantmonster.png')
         self.hp = 40
         self.xrunspeed = -self.RUN_SPEED_PPS
         self.yrunspeed = random.choice([-1, 1]) * self.RUN_SPEED_PPS
@@ -119,7 +119,7 @@ class Powermonster:
         self.frame = 0
         self.total_frames = 0
         if Powermonster.image is None:
-           Powermonster.image = load_image('Powermonster.png')
+           Powermonster.image = load_image('Resource//Powermonster.png')
         self.hp = 30
         self.xrunspeed = self.RUN_SPEED_PPS
         self.yrunspeed = random.choice([-1, 1]) * self.RUN_SPEED_PPS
@@ -168,7 +168,7 @@ class Swagemonster:
         self.frame = 0
         self.total_frames = 0
         if Swagemonster.image is None:
-            self.image = load_image('Swagemonster.png')
+            self.image = load_image('Resource//Swagemonster.png')
         self.hp = 30
         self.xrunspeed = random.choice([-1, 1]) * self.RUN_SPEED_PPS
         self.yrunspeed = -self.RUN_SPEED_PPS
@@ -204,7 +204,7 @@ class Deleted_Eyemonster:
     FRAMES_PER_ACTION = 4
 
     def __init__(self):
-        self.image = load_image("deleted_em.png")
+        self.image = load_image("Resource//deleted_em.png")
         self.frame = 0
         self.total_frames = 0
         self.x, self.y = 0, 0
@@ -223,7 +223,7 @@ class Deleted_Powermonster:
     FRAMES_PER_ACTION = 4
 
     def __init__(self):
-        self.image = load_image("deleted_pm.png")
+        self.image = load_image("Resource//deleted_pm.png")
         self.frame = 0
         self.total_frames = 0
         self.x, self.y = 0, 0
@@ -242,7 +242,7 @@ class Deleted_Plantmonster:
     FRAMES_PER_ACTION = 4
 
     def __init__(self):
-        self.image = load_image("deleted_plm.png")
+        self.image = load_image("Resource//deleted_plm.png")
         self.frame = 0
         self.total_frames = 0
         self.x, self.y = 0, 0
@@ -261,7 +261,7 @@ class Deleted_Swagemonster:
     FRAMES_PER_ACTION = 4
 
     def __init__(self):
-        self.image = load_image("deleted_sm.png")
+        self.image = load_image("Resource//deleted_sm.png")
         self.frame = 0
         self.total_frames = 0
         self.x, self.y = 0, 0
