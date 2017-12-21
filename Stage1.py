@@ -42,45 +42,42 @@ powermonster_time = None
 swagemonster_time = None
 special_attack_items_time = None
 bomb_item_time = None
+makecounter = None
+makecounter_time = None
 
 
 # 시간에 따라 monster 를 만들어주는 함수
 def make_all_monster(frame_time):
     global eyemonster_time, plantmonster_time, powermonster_time, swagemonster_time, eyemonsters, powermonsters, \
-           plantmonsters, swagemonsters, alienbosstime
+           plantmonsters, swagemonsters, alienbosstime, makecounter, makecounter_time
     eyemonster_time += frame_time
     plantmonster_time += frame_time
     powermonster_time += frame_time
     swagemonster_time += frame_time
     alienbosstime += frame_time
+    makecounter_time += frame_time
+    if makecounter_time > 30.0:
+        makecounter += 1
     if eyemonster_time > 5:
-        if current_time > 30:
+        for i in range(makecounter):
             new_eye_monster = Eyemonster()
             eyemonsters.append(new_eye_monster)
-        new_eye_monster = Eyemonster()
-        eyemonsters.append(new_eye_monster)
-        eyemonster_time = 0
+            eyemonster_time = 0
     if plantmonster_time > 10:
-        if current_time > 60:
+        for i in range(makecounter):
             new_plant_monster = Plantmonster()
-            eyemonsters.append(new_plant_monster)
-        new_plant_monster = Plantmonster()
-        plantmonsters.append(new_plant_monster)
-        plantmonster_time = 0
+            plantmonsters.append(new_plant_monster)
+            plantmonster_time = 0
     if powermonster_time > 7:
-        if current_time > 40:
+        for i in range(makecounter):
             new_power_monster = Powermonster()
             powermonsters.append(new_power_monster)
-        new_power_monster = Powermonster()
-        powermonsters.append(new_power_monster)
-        powermonster_time = 0
+            powermonster_time = 0
     if swagemonster_time > 7:
-        if current_time > 50:
+        for i in range(makecounter):
             new_swage_monster = Swagemonster()
             swagemonsters.append(new_swage_monster)
-        new_swage_monster = Swagemonster()
-        swagemonsters.append(new_swage_monster)
-        swagemonster_time = 0
+            swagemonster_time = 0
     if alienbosstime > 60.0:
         new_alienboss = AlienBoss()
         alienboss_list.append(new_alienboss)
@@ -365,7 +362,7 @@ def enter():
         missile_effects, special_attack_effects, ui, background, stage1_BGM, alienboss_list, boss_attacks, \
         alienboss_list, bullets, missiles, special_attacks,bomb_attacks,boss_attacks,special_attack_items, bomb_items, Score, \
         alienbosstime, eyemonster_time, plantmonster_time, swagemonster_time, powermonster_time, special_attack_items_time,\
-        bomb_item_time
+        bomb_item_time, makecounter, makecounter_time
     background = load_image("Space.jpg")
     soldier = Soldier()
     ui = UI()
@@ -399,6 +396,8 @@ def enter():
     swagemonster_time = 0
     special_attack_items_time = 0
     bomb_item_time = 0
+    makecounter = 1
+    makecounter_time = 0
 
 
 def exit():
